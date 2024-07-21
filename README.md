@@ -1,5 +1,5 @@
 # eollugage-pc
 
-Package Manager: 'yarn'
+Package Manager: `yarn`
 
-How to Start : 'yarn dev'
+How to Start : `yarn dev`
