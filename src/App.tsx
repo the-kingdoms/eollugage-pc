@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Route, Routes } from 'react-router'
+import { ROUTE } from './constants/path'
+import ProcessMain from './pages/process/process'
+import Layout from './components/layout'
+import Login from './pages/login'
+import HistoryMain from './pages/history/history'
+import WaitMain from './pages/wait/wait'
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Routes>
+      <Route path={ROUTE.LOGIN} element={<Login />} />
+      <Route element={<Layout />}>
+        <Route path={ROUTE.WAIT_MAIN} element={<WaitMain />} />
+        <Route path={ROUTE.PROCESS_MAIN} element={<ProcessMain />} />
+        <Route path={ROUTE.HISTORY_MAIN} element={<HistoryMain />} />
+      </Route>
+    </Routes>
+  )
 }
-
-export default App;
