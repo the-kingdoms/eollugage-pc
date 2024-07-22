@@ -10,8 +10,9 @@ let mainWindow
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 680,
+    width: 1440,
+    height: 900,
+    resizable: false,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
@@ -24,7 +25,6 @@ function createWindow() {
 
   if (isDev) mainWindow.webContents.openDevTools({ mode: 'detach' })
 
-  mainWindow.setResizable(true)
   mainWindow.on('closed', () => {
     mainWindow = null
     app.quit()
