@@ -28,6 +28,7 @@ export default function OrderCard({ tableNumber, status, orders, prevOrders }: O
   const pathname = window.location.pathname
 
   const [showDetail, setShowDetail] = useState<boolean>(false)
+  const toggleShowDetail = () => setShowDetail(!showDetail)
 
   return (
     <Container>
@@ -62,7 +63,9 @@ export default function OrderCard({ tableNumber, status, orders, prevOrders }: O
           </>
         )}
         {pathname === '/process' && <BlackButton>결제 완료</BlackButton>}
-        {pathname === '/history' && status === 'multi' && <BlackButton>이전 주문 보기</BlackButton>}
+        {pathname === '/history' && status === 'multi' && (
+          <BlackButton onClick={toggleShowDetail}>{showDetail ? '최초 주문만 보기' : '이전 주문 보기'}</BlackButton>
+        )}
       </ButtonContainer>
     </Container>
   )
