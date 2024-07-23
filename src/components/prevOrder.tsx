@@ -2,7 +2,7 @@ import React, { SetStateAction, useState } from 'react'
 import { orderType } from './orderCard'
 import styled from 'styled-components'
 import { Container as OrderContainer, Detail as OrderDetail } from './orderDetail'
-import { returnOptions, returnTotalPrice } from 'utils/cardFunc'
+import { returnOrderDetail, returnTotalPrice } from 'utils/cardFunc'
 import { ReactComponent as UpArrowIcon } from 'assets/image/up-arrow.svg'
 import { ReactComponent as DownArrowIcon } from 'assets/image/down-arrow.svg'
 
@@ -29,10 +29,7 @@ export default function PreviousOrder({ orders, showDetail, setShowDetail, showL
             <PrevOrderContainer>
               <OrderContainer>
                 {orders.map(order => (
-                  <OrderDetail>
-                    {order.name} {order.count === undefined ? '1' : order.count}개 {returnOptions(order.options)} |{' '}
-                    {order.price.toLocaleString()}원
-                  </OrderDetail>
+                  <OrderDetail>{returnOrderDetail(order)}</OrderDetail>
                 ))}
               </OrderContainer>
               <TotalPrice>{returnTotalPrice(orders).toLocaleString()}원</TotalPrice>

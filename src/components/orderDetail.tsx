@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { orderType } from './orderCard'
-import { returnOptions } from 'utils/cardFunc'
+import { returnOrderDetail } from 'utils/cardFunc'
 
 interface OrderDetailProps {
   orders: orderType[]
@@ -10,10 +10,7 @@ export default function OrderDetail({ orders }: OrderDetailProps) {
   return (
     <Container>
       {orders.map(order => (
-        <Detail>
-          {order.name} {order.count === undefined ? '1' : order.count}개 {returnOptions(order.options)} |{' '}
-          {order.price.toLocaleString()}원
-        </Detail>
+        <Detail>{returnOrderDetail(order)}</Detail>
       ))}
     </Container>
   )

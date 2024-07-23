@@ -7,7 +7,13 @@ export const returnTotalPrice = (orders: orderType[]) =>
   }, 0)
 
 export const returnOptions = (options: productType[] | undefined) => {
-  if (options === undefined) return
+  if (options === undefined) return ''
 
   return ' | '.concat(options?.map(option => `${option.name} (+${option.price}원)`).join(', '))
+}
+
+export const returnOrderDetail = (order: orderType) => {
+  return `${order.name} ${order.count === undefined ? '1' : order.count}개 ${returnOptions(
+    order.options,
+  )} | ${order.price.toLocaleString()}원`
 }
