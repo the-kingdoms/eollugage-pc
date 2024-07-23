@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, Routes } from 'react-router'
 import { ROUTE } from './constants/path'
-import ProcessMain from './pages/process/process'
+import ProcessMain from './pages/process'
 import Layout from './components/layout'
 import Login from './pages/login'
-import HistoryMain from './pages/history/history'
-import WaitMain from './pages/wait/wait'
+import HistoryMain from './pages/history'
+import WaitMain from './pages/waiting'
 
 export default function App() {
   return (

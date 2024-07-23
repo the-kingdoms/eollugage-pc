@@ -12,4 +12,11 @@ const CardContainer = styled.div`
   gap: 24px;
 `
 
-export { Container, CardContainer }
+const TabTitle = styled.div`
+  font-size: 32px;
+  color: #131313;
+  font-weight: 600;
+  margin-bottom: 36px;
+`
+
+export { Container, CardContainer, TabTitle }
