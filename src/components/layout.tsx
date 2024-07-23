@@ -1,26 +1,34 @@
 import { Outlet, useNavigate } from 'react-router'
 import styled from 'styled-components'
 import NavBar from './navBar'
+import { useAtom } from 'jotai'
+import { currentTabAtom, historyCountAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
 
 export default function Layout() {
   const navigate = useNavigate()
+  const [, setCurrentTab] = useAtom(currentTabAtom)
   const navBarItem = [
     {
       name: '승인 대기',
-      count: 3,
-      onClick: () => navigate('/waiting'),
+      count: waitingCount,
+      onClick: () => onClickTab('/waiting'),
     },
     {
       name: '진행 중',
-      count: 3,
-      onClick: () => navigate('/process'),
+      count: processount,
+      onClick: () => onClickTab('/process'),
     },
     {
       name: '히스토리',
-      count: 3,
-      onClick: () => navigate('/history'),
+      count: historyCount,
+      onClick: () => onClickTab('/history'),
     },
   ]
+
+  const onClickTab = (pathname: string) => {
+    setCurrentTab(pathname)
+    navigate(pathname)
+  }
 
   return (
     <Container>
