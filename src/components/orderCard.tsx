@@ -47,7 +47,12 @@ export default function OrderCard({ tableNumber, status, orders, prevOrders }: O
       <OrderDetail orders={orders} />
       {!(pathname === '/history' && status === 'single') && <Divider />}
       {prevOrders !== undefined && (
-        <PreviousOrder showDetail={showDetail} setShowDetail={setShowDetail} orders={orders} />
+        <PreviousOrder
+          showDetail={showDetail}
+          setShowDetail={setShowDetail}
+          orders={orders}
+          showLabel={pathname === '/process' && status === 'multi'}
+        />
       )}
       <ButtonContainer>
         {pathname === '/waiting' && (

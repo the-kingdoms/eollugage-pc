@@ -10,10 +10,10 @@ interface PreviousOrderProps {
   orders: orderType[]
   showDetail: boolean
   setShowDetail: React.Dispatch<SetStateAction<boolean>>
-  showLabel?: boolean
+  showLabel: boolean
 }
 
-export default function PreviousOrder({ orders, showDetail, setShowDetail, showLabel = true }: PreviousOrderProps) {
+export default function PreviousOrder({ orders, showDetail, setShowDetail, showLabel }: PreviousOrderProps) {
   const toggleShowDetail = () => setShowDetail(!showDetail)
   return (
     <Container>
