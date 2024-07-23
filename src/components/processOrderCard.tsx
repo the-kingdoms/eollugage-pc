@@ -35,7 +35,7 @@ export default function OrderCard({ from, tableNumber, status, orders, prevOrder
         ))}
       </OrderContainer>
       <Divider />
-      <PreviousOrder orders={orders} />
+      {prevOrders !== undefined && <PreviousOrder orders={orders} />}
       <ButtonContainer>
         <ApproveButton>결제 완료</ApproveButton>
       </ButtonContainer>
@@ -44,7 +44,6 @@ export default function OrderCard({ from, tableNumber, status, orders, prevOrder
 }
 
 const Container = styled.div`
-  flex: 1;
   padding: 40px;
   border-radius: 16px;
   border: 2px solid #c6c6c6;
