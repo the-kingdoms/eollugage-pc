@@ -1,19 +1,34 @@
 import styled from 'styled-components'
 import OrderChip, { statusType } from './orderChip'
 import dayjs from 'dayjs'
-import { orderType, productType } from './waitingOrderCard'
 import { returnOptions, returnTotalPrice } from 'utils/cardFunc'
 import PreviousOrder from './prevOrder'
+import OrderDetail from './orderDetail'
+import { useState } from 'react'
+import path from 'path'
+
+export type productType = {
+  name: string
+  price: number
+  count?: number
+}
+
+export type orderType = productType & {
+  options?: productType[]
+}
 
 interface OrderCardProps {
-  from: 'waiting' | 'process' | 'history'
   tableNumber: number
   status: statusType
   orders: orderType[]
   prevOrders?: orderType[]
 }
 
-export default function OrderCard({ from, tableNumber, status, orders, prevOrders }: OrderCardProps) {
+export default function OrderCard({ tableNumber, status, orders, prevOrders }: OrderCardProps) {
+  const pathname = window.location.pathname
+
+  const [showDetail, setShowDetail] = useState<boolean>(false)
+
   return (
     <Container>
       <Top>
@@ -21,27 +36,29 @@ export default function OrderCard({ from, tableNumber, status, orders, prevOrder
           <TableNumber>테이블 번호 {tableNumber.toString().padStart(2, '0')}</TableNumber>
           <OrderChip status={status} />
         </TitleContainer>
-        <TimeText>{dayjs().locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}</TimeText>
+        <TimeText>
+          {pathname === '/waiting' ? '0분 전' : dayjs().locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}
+          {pathname === '/history' && ' 결제 완료'}
+        </TimeText>
       </Top>
       <OrderSummary>
         메뉴 {orders.length}개 총 {returnTotalPrice(orders).toLocaleString()}원
       </OrderSummary>
-      <OrderContainer>
-        {orders.map(order => (
-          <OrderDetail>
-            {order.name} {order.count === undefined ? '1' : order.count}개 {returnOptions(order.options)} |{' '}
-            {order.price.toLocaleString()}원
-          </OrderDetail>
-        ))}
-      </OrderContainer>
-      {status === 'multi' && <Divider />}
-      {prevOrders !== undefined && <PreviousOrder orders={orders} />}
-      {status === 'multi' && (
-        <ButtonContainer>
-          <ApproveButton>최초 주문만 보기</ApproveButton>
-          {/* <ApproveButton>이전 주문 보기</ApproveButton> */}
-        </ButtonContainer>
+      <OrderDetail orders={orders} />
+      {!(pathname === '/history' && status === 'single') && <Divider />}
+      {prevOrders !== undefined && (
+        <PreviousOrder showDetail={showDetail} setShowDetail={setShowDetail} orders={orders} />
       )}
+      <ButtonContainer>
+        {pathname === '/waiting' && (
+          <>
+            <WhiteButton>주문 거절</WhiteButton>
+            <BlackButton>주문 승인</BlackButton>
+          </>
+        )}
+        {pathname === '/process' && <BlackButton>결제 완료</BlackButton>}
+        {pathname === '/history' && status === 'multi' && <BlackButton>이전 주문 보기</BlackButton>}
+      </ButtonContainer>
     </Container>
   )
 }
@@ -78,20 +95,10 @@ const OrderSummary = styled.div`
   font-size: 40px;
   margin-bottom: 24px;
 `
-export const OrderContainer = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  gap: 12px;
-`
-export const OrderDetail = styled.div`
-  font-size: 20px;
-  color: #6f6f6f;
-  font-weight: 500;
-`
 const Divider = styled.hr`
   margin: 32px 0;
 `
-const DenyButton = styled.div`
+const WhiteButton = styled.div`
   border-radius: 8px;
   border: 1px solid #a8a8a8;
   padding: 20px 32px;
@@ -99,7 +106,7 @@ const DenyButton = styled.div`
   font-size: 20px;
   font-weight: 600;
 `
-const ApproveButton = styled.div`
+const BlackButton = styled.div`
   border-radius: 8px;
   border: 1px solid #131313;
   background-color: #131313;

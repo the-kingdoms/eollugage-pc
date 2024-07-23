@@ -1,4 +1,4 @@
-import { orderType, productType } from 'components/waitingOrderCard'
+import { orderType, productType } from 'components/orderCard'
 
 export const returnTotalPrice = (orders: orderType[]) =>
   orders.reduce((acc, order) => {
