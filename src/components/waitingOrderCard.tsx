@@ -1,35 +1,25 @@
 import styled from 'styled-components'
 import OrderChip, { statusType } from './orderChip'
+import { returnOptions, returnTotalPrice } from 'utils/cardFunc'
 
-type productType = {
+export type productType = {
   name: string
   price: number
   count?: number
 }
 
-type orderType = productType & {
+export type orderType = productType & {
   options?: productType[]
 }
 
 interface OrderCardProps {
+  from: 'waiting' | 'process' | 'history'
   tableNumber: number
   status: statusType
   orders: orderType[]
 }
 
-export default function OrderCard({ tableNumber, status, orders }: OrderCardProps) {
-  const returnTotalPrice = () =>
-    orders.reduce((acc, order) => {
-      if (order.options) return acc + order.price + order.options?.reduce((acc2, option) => acc2 + option.price, 0)
-      return acc + order.price
-    }, 0)
-
-  const returnOptions = (options: productType[] | undefined) => {
-    if (options === undefined) return
-
-    return ' | '.concat(options?.map(option => `${option.name} (+${option.price}원)`).join(', '))
-  }
-
+export default function OrderCard({ from, tableNumber, status, orders }: OrderCardProps) {
   return (
     <Container>
       <Top>
@@ -40,7 +30,7 @@ export default function OrderCard({ tableNumber, status, orders }: OrderCardProp
         <TimeText>0분 전</TimeText>
       </Top>
       <OrderSummary>
-        메뉴 {orders.length}개 총 {returnTotalPrice().toLocaleString()}원
+        메뉴 {orders.length}개 총 {returnTotalPrice(orders).toLocaleString()}원
       </OrderSummary>
       <OrderContainer>
         {orders.map(order => (
