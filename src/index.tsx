@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import './style/global.css'
+import './styles/global.css'
 
 const queryClient = new QueryClient()
 
