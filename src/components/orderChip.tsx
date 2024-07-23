@@ -1,12 +1,27 @@
 import styled from 'styled-components'
 
-export type statusType = 'new' | 'extra'
+export type statusType = 'new' | 'extra' | 'multi' | 'single'
 interface OrderChipProps {
   status: statusType
 }
 
 export default function OrderChip({ status }: OrderChipProps) {
-  return <Container status={status}>{status === 'new' ? '신규 주문' : '추가 주문'}</Container>
+  const returnChipText = () => {
+    switch (status) {
+      case 'new':
+        return '신규 주문'
+      case 'extra':
+        return '추가 주문'
+      case 'single':
+        return '단일 주문'
+      case 'multi':
+        return '복수 주문'
+      default:
+        return 'error'
+    }
+  }
+
+  return <Container status={status}>{returnChipText()}</Container>
 }
 
 const Container = styled.div<{ status: statusType }>`
