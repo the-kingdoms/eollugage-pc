@@ -1,25 +1,28 @@
-import { useState } from 'react'
-import { orderType } from './waitingOrderCard'
+import React, { SetStateAction, useState } from 'react'
+import { orderType } from './orderCard'
 import styled from 'styled-components'
-import { OrderContainer, OrderDetail } from './processOrderCard'
+import { Container as OrderContainer, Detail as OrderDetail } from './orderDetail'
 import { returnOptions, returnTotalPrice } from 'utils/cardFunc'
 import { ReactComponent as UpArrowIcon } from 'assets/image/up-arrow.svg'
 import { ReactComponent as DownArrowIcon } from 'assets/image/down-arrow.svg'
 
 interface PreviousOrderProps {
   orders: orderType[]
+  showDetail: boolean
+  setShowDetail: React.Dispatch<SetStateAction<boolean>>
+  showLabel?: boolean
 }
 
-export default function PreviousOrder({ orders }: PreviousOrderProps) {
-  const [showDetail, setShowDetail] = useState<boolean>(false)
-
+export default function PreviousOrder({ orders, showDetail, setShowDetail, showLabel = true }: PreviousOrderProps) {
   const toggleShowDetail = () => setShowDetail(!showDetail)
   return (
     <Container>
-      <ShowButton onClick={toggleShowDetail}>
-        이전 주문 보기
-        {showDetail ? <UpArrowIcon width={24} height={24} /> : <DownArrowIcon width={24} height={24} />}
-      </ShowButton>
+      {showLabel && (
+        <ShowButton onClick={toggleShowDetail}>
+          이전 주문 보기
+          {showDetail ? <UpArrowIcon width={24} height={24} /> : <DownArrowIcon width={24} height={24} />}
+        </ShowButton>
+      )}
       {showDetail && (
         <OrderBox>
           {orders.map(order => (
