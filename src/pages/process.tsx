@@ -1,6 +1,8 @@
 import OrderCard from 'components/orderCard'
+import { useAtom } from 'jotai'
 import styled from 'styled-components'
 import { Container, CardContainer, TabTitle } from 'styles/shared'
+import { processCountAtom } from 'utils/atom'
 
 export const orderlist = [
   {
@@ -31,9 +33,11 @@ export const orderlist = [
 ]
 
 export default function ProcessMain() {
+  const [processCount] = useAtom(processCountAtom)
+
   return (
     <Container>
-      <TabTitle>진행 중 3</TabTitle>
+      <TabTitle>진행 중 {processCount}</TabTitle>
       <CardContainer>
         <OrderCard status="multi" tableNumber={2} orders={orderlist} prevOrders={orderlist} />
         <OrderCard status="single" tableNumber={2} orders={orderlist} />

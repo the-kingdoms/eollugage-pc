@@ -7,6 +7,10 @@ import { currentTabAtom, historyCountAtom, processCountAtom, waitingCountAtom } 
 export default function Layout() {
   const navigate = useNavigate()
   const [, setCurrentTab] = useAtom(currentTabAtom)
+  const [waitingCount] = useAtom(waitingCountAtom)
+  const [processCount] = useAtom(processCountAtom)
+  const [historyCount] = useAtom(historyCountAtom)
+
   const navBarItem = [
     {
       name: '승인 대기',
@@ -15,7 +19,7 @@ export default function Layout() {
     },
     {
       name: '진행 중',
-      count: processount,
+      count: processCount,
       onClick: () => onClickTab('/process'),
     },
     {

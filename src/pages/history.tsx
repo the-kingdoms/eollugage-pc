@@ -5,13 +5,16 @@ import { useState } from 'react'
 import { Container, CardContainer, TabTitle } from 'styles/shared'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
+import { historyCountAtom } from 'utils/atom'
 
 export default function HistoryMain() {
+  const [historyCount] = useAtom(historyCountAtom)
   const [date, setDate] = useState<string>(dayjs().format('YYYY.MM.DD'))
 
   return (
     <Container>
-      <TabTitle>히스토리</TabTitle>
+      <TabTitle>히스토리 {historyCount}</TabTitle>
       <HistoryDateFilter date={date} setDate={setDate} />
       <DateText>{date}</DateText>
       <CardContainer>
