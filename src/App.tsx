@@ -6,7 +6,6 @@ import Layout from './components/layout'
 import Login from './pages/login'
 import HistoryMain from './pages/history'
 import WaitMain from './pages/waiting'
-import { DevTools } from 'jotai-devtools'
 
 export default function App() {
   return (

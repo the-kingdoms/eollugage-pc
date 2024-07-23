@@ -1,6 +1,5 @@
 import OrderCard from 'components/orderCard'
 import { useAtom } from 'jotai'
-import styled from 'styled-components'
 import { Container, CardContainer, TabTitle } from 'styles/shared'
 import { processCountAtom } from 'utils/atom'
 

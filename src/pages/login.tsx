@@ -14,7 +14,7 @@ export default function Login() {
           간편하게 일하는 법
         </Title>
         <KakaoLoginButton onClick={() => navigate('/waiting')}>
-          <img src={require('assets/image/kakao.png')} width={24} height={24} />
+          <img src={require('assets/image/kakao.png')} width={24} height={24} alt="kakao-login-button" />
           카카오 로그인
         </KakaoLoginButton>
       </Right>

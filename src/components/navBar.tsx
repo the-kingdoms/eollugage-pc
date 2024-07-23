@@ -21,7 +21,7 @@ export default function NavBar({ items }: VerticalNavProps) {
       case 1:
         setCurrentTab(ROUTE.PROCESS_MAIN)
         break
-      case 1:
+      case 2:
         setCurrentTab(ROUTE.HISTORY_MAIN)
         break
       default:

@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 import OrderChip, { statusType } from './orderChip'
 import dayjs from 'dayjs'
-import { returnOptions, returnTotalPrice } from 'utils/cardFunc'
+import { returnTotalPrice } from 'utils/cardFunc'
 import PreviousOrder from './prevOrder'
 import OrderDetail from './orderDetail'
 import { useState } from 'react'
-import path from 'path'
 
 export type productType = {
   name: string

@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from 'react'
+import React, { SetStateAction } from 'react'
 import { orderType } from './orderCard'
 import styled from 'styled-components'
 import { Container as OrderContainer, Detail as OrderDetail } from './orderDetail'
