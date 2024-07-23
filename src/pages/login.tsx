@@ -13,7 +13,7 @@ export default function Login() {
           <Logo />
           간편하게 일하는 법
         </Title>
-        <KakaoLoginButton onClick={() => navigate('/process')}>
+        <KakaoLoginButton onClick={() => navigate('/waiting')}>
           <img src={require('assets/image/kakao.png')} width={24} height={24} />
           카카오 로그인
         </KakaoLoginButton>

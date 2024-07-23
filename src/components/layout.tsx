@@ -8,7 +8,7 @@ export default function Layout() {
     {
       name: '승인 대기',
       count: 3,
-      onClick: () => navigate('/wait'),
+      onClick: () => navigate('/waiting'),
     },
     {
       name: '진행 중',
