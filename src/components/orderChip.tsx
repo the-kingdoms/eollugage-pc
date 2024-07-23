@@ -31,6 +31,6 @@ const Container = styled.div<{ status: statusType }>`
   padding: 8px 12px;
   font-size: 14px;
   font-weight: 600;
-  color: ${props => (props.status === 'new' ? '#0043CE' : '#0E6027')};
-  background-color: ${props => (props.status === 'new' ? '#D0E2FF' : '#A7F0BA')};
+  color: ${props => (props.status === 'new' || props.status === 'single' ? '#0043CE' : '#0E6027')};
+  background-color: ${props => (props.status === 'new' || props.status === 'single' ? '#D0E2FF' : '#A7F0BA')};
 `
