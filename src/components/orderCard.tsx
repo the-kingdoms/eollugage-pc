@@ -5,6 +5,7 @@ import { returnTotalPrice } from 'utils/cardFunc'
 import PreviousOrder from './prevOrder'
 import OrderDetail from './orderDetail'
 import { useState } from 'react'
+import { ROUTE } from '@constants/path'
 
 export type productType = {
   name: string
@@ -37,32 +38,32 @@ export default function OrderCard({ tableNumber, status, orders, prevOrders }: O
           <OrderChip status={status} />
         </TitleContainer>
         <TimeText>
-          {pathname === '/waiting' ? '0분 전' : dayjs().locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}
-          {pathname === '/history' && ' 결제 완료'}
+          {pathname === ROUTE.WAITING_MAIN ? '0분 전' : dayjs().locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}
+          {pathname === ROUTE.HISTORY_MAIN && ' 결제 완료'}
         </TimeText>
       </Top>
       <OrderSummary>
         메뉴 {orders.length}개 총 {returnTotalPrice(orders).toLocaleString()}원
       </OrderSummary>
       <OrderDetail orders={orders} />
-      {!(pathname === '/history' && status === 'single') && <Divider />}
+      {!(pathname === ROUTE.HISTORY_MAIN && status === 'single') && <Divider />}
       {prevOrders !== undefined && (
         <PreviousOrder
           showDetail={showDetail}
           setShowDetail={setShowDetail}
           orders={orders}
-          showLabel={pathname === '/process' && status === 'multi'}
+          showLabel={pathname === ROUTE.PROCESS_MAIN && status === 'multi'}
         />
       )}
       <ButtonContainer>
-        {pathname === '/waiting' && (
+        {pathname === ROUTE.WAITING_MAIN && (
           <>
             <WhiteButton>주문 거절</WhiteButton>
             <BlackButton>주문 승인</BlackButton>
           </>
         )}
-        {pathname === '/process' && <BlackButton>결제 완료</BlackButton>}
-        {pathname === '/history' && status === 'multi' && (
+        {pathname === ROUTE.PROCESS_MAIN && <BlackButton>결제 완료</BlackButton>}
+        {pathname === ROUTE.HISTORY_MAIN && status === 'multi' && (
           <BlackButton onClick={toggleShowDetail}>{showDetail ? '최초 주문만 보기' : '이전 주문 보기'}</BlackButton>
         )}
       </ButtonContainer>

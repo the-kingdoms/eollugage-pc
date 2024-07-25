@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import NavBar from './navBar'
 import { useAtom } from 'jotai'
 import { currentTabAtom, historyCountAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
+import { ROUTE } from '@constants/path'
 
 export default function Layout() {
   const navigate = useNavigate()
@@ -15,17 +16,17 @@ export default function Layout() {
     {
       name: '승인 대기',
       count: waitingCount,
-      onClick: () => onClickTab('/waiting'),
+      onClick: () => onClickTab(ROUTE.WAITING_MAIN),
     },
     {
       name: '진행 중',
       count: processCount,
-      onClick: () => onClickTab('/process'),
+      onClick: () => onClickTab(ROUTE.PROCESS_MAIN),
     },
     {
       name: '히스토리',
       count: historyCount,
-      onClick: () => onClickTab('/history'),
+      onClick: () => onClickTab(ROUTE.HISTORY_MAIN),
     },
   ]
 
