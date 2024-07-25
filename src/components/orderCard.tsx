@@ -5,7 +5,7 @@ import { returnTotalPrice } from 'utils/cardFunc'
 import PreviousOrder from './prevOrder'
 import OrderDetail from './orderDetail'
 import { useState } from 'react'
-import { ROUTE } from '@constants/path'
+import { ROUTE } from 'constants/path'
 
 export type productType = {
   name: string

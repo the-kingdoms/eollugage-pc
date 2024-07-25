@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import NavBar from './navBar'
 import { useAtom } from 'jotai'
 import { currentTabAtom, historyCountAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
-import { ROUTE } from '@constants/path'
+import { ROUTE } from 'constants/path'
 
 export default function Layout() {
   const navigate = useNavigate()
