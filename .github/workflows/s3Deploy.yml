@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  publish-storybook:
+  publish-eollugage-pc:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,4 +31,4 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: Upload to S3
-        run: aws s3 sync --region ap-northeast-2 ./build s3://s3-eollugaga-pc --delete
+        run: aws s3 sync --region ap-northeast-2 ./build s3://s3-eollugage-pc --delete
