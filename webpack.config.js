@@ -1,6 +1,13 @@
 const path = require('path')
+const dotenv = require('dotenv')
+dotenv.config()
 
 module.exports = {
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
+  ],
   resolve: {
     alias: {
       '@assets': path.resolve(__dirname, 'src/assets/'),
