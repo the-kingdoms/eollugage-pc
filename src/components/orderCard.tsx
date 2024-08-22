@@ -6,6 +6,7 @@ import PreviousOrder from './prevOrder'
 import OrderDetail from './orderDetail'
 import { useState } from 'react'
 import { ROUTE } from 'constants/path'
+import { OrderDetail as OrderType } from 'utils/parseOrderDetail'
 
 export type productType = {
   name: string
@@ -19,12 +20,13 @@ export type orderType = productType & {
 
 interface OrderCardProps {
   tableNumber: number
+  totalPrice: number
   status: statusType
-  orders: orderType[]
+  orders: OrderType[]
   prevOrders?: orderType[]
 }
 
-export default function OrderCard({ tableNumber, status, orders, prevOrders }: OrderCardProps) {
+export default function OrderCard({ tableNumber, totalPrice, status, orders, prevOrders }: OrderCardProps) {
   const pathname = window.location.pathname
 
   const [showDetail, setShowDetail] = useState<boolean>(false)
@@ -43,7 +45,7 @@ export default function OrderCard({ tableNumber, status, orders, prevOrders }: O
         </TimeText>
       </Top>
       <OrderSummary>
-        메뉴 {orders.length}개 총 {returnTotalPrice(orders).toLocaleString()}원
+        메뉴 {orders.length}개 총 {totalPrice.toLocaleString()}원
       </OrderSummary>
       <OrderDetail orders={orders} />
       {!(pathname === ROUTE.HISTORY_MAIN && status === 'single') && <Divider />}
@@ -51,7 +53,7 @@ export default function OrderCard({ tableNumber, status, orders, prevOrders }: O
         <PreviousOrder
           showDetail={showDetail}
           setShowDetail={setShowDetail}
-          orders={orders}
+          orders={prevOrders}
           showLabel={pathname === ROUTE.PROCESS_MAIN && status === 'multi'}
         />
       )}

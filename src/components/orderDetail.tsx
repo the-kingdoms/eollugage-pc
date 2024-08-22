@@ -1,9 +1,10 @@
 import styled from 'styled-components'
 import { orderType } from './orderCard'
 import { returnOrderDetail } from 'utils/cardFunc'
+import { OrderDetail as OrderType } from 'utils/parseOrderDetail'
 
 interface OrderDetailProps {
-  orders: orderType[]
+  orders: OrderType[]
 }
 
 export default function OrderDetail({ orders }: OrderDetailProps) {
