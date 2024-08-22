@@ -6,7 +6,7 @@ import PreviousOrder from './prevOrder'
 import OrderDetail from './orderDetail'
 import { useState } from 'react'
 import { ROUTE } from 'constants/path'
-import { OrderDetail as OrderType } from 'utils/parseOrderDetail'
+import { Menu } from 'utils/type'
 
 export type productType = {
   name: string
@@ -22,7 +22,7 @@ interface OrderCardProps {
   tableNumber: number
   totalPrice: number
   status: statusType
-  orders: OrderType[]
+  orders: Menu[]
   prevOrders?: orderType[]
 }
 

@@ -1,19 +1,8 @@
-interface Option {
-  categoryName: string
-  name: string
-  price: number
-}
+import { Menu } from './type'
 
-export interface OrderDetail {
-  name: string
-  count: number
-  price: number
-  options: Option[]
-}
-
-export const parseOrder = (jsonString: string): OrderDetail[] => {
+export const parseOrder = (jsonString: string): Menu[] => {
   try {
-    const parsedData: OrderDetail[] = JSON.parse(jsonString)
+    const parsedData: Menu[] = JSON.parse(jsonString)
     return parsedData
   } catch (error) {
     console.error('Failed to parse order:', error)
