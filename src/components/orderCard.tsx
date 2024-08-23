@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import OrderChip, { statusType } from './orderChip'
 import dayjs from 'dayjs'
-import { returnTotalPrice } from 'utils/cardFunc'
 import PreviousOrder from './prevOrder'
 import OrderDetail from './orderDetail'
 import { useState } from 'react'
@@ -23,7 +22,7 @@ interface OrderCardProps {
   totalPrice: number
   status: statusType
   orders: Menu[]
-  prevOrders?: orderType[]
+  prevOrders?: Menu[][]
 }
 
 export default function OrderCard({ tableNumber, totalPrice, status, orders, prevOrders }: OrderCardProps) {
