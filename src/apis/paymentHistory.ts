@@ -1,10 +1,10 @@
 import api from './network'
 
-interface PaymentHistory {
+export interface PaymentHistory {
   paymentHistoryId: string
   storeId: string
   tableNumber: number
-  status: 'WAITING'
+  status: 'WAITING' | 'PROCESS' | 'HISTORY'
   paidAt: null
   totalPrice: number
   orderHistoryResponseDtoList: OrderHistory[]
@@ -15,7 +15,7 @@ export interface OrderHistory {
   paymentHistoryId: number
   orderDetail: string
   totalPrice: number
-  status: 'APPROVED' | 'PENDING'
+  status: 'APPROVED' | 'PENDING' | 'DISAPPROVED'
 }
 
 async function getPaymentHistory(storeId: string): Promise<PaymentHistory[]> {
