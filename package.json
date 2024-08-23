@@ -19,6 +19,7 @@
     "dayjs": "^1.11.12",
     "dotenv": "^16.4.5",
     "electron-is-dev": "^3.0.1",
+    "framer-motion": "^11.3.30",
     "jotai": "^2.9.0",
     "jotai-devtools": "^0.10.0",
     "react": "^18.3.1",

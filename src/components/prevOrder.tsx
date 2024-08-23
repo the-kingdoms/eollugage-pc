@@ -5,6 +5,19 @@ import { returnOrderDetail, returnTotalPrice } from 'utils/cardFunc'
 import { ReactComponent as UpArrowIcon } from 'assets/image/up-arrow.svg'
 import { ReactComponent as DownArrowIcon } from 'assets/image/down-arrow.svg'
 import { Menu } from 'utils/type'
+import { Variants, motion } from 'framer-motion'
+
+const iconVariants: Variants = {
+  notShow: {
+    transform: 'rotate(0deg)',
+    transition: { duration: 0.1 },
+  },
+  show: {
+    transform: 'rotate(180deg)',
+    transition: { duration: 0.1 },
+  },
+}
+
 
 interface PreviousOrderProps {
   orders: Menu[][]
@@ -21,7 +34,15 @@ export default function PreviousOrder({ orders, showDetail, setShowDetail, showL
       {showLabel && (
         <ShowButton onClick={toggleShowDetail}>
           이전 주문 보기
-          {showDetail ? <UpArrowIcon width={24} height={24} /> : <DownArrowIcon width={24} height={24} />}
+          <motion.svg
+            width={24}
+            height={24}
+            variants={iconVariants}
+            initial="notShow"
+            animate={showDetail ? 'show' : 'notShow'}
+          >
+            <DownArrowIcon width={24} height={24} />
+          </motion.svg>
         </ShowButton>
       )}
       {showDetail && (
