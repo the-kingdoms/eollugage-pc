@@ -4,13 +4,15 @@ import NavBar from './navBar'
 import { useAtom } from 'jotai'
 import { currentTabAtom, historyCountAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
 import { ROUTE } from 'constants/path'
+import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
+import { useEffect } from 'react'
 
 export default function Layout() {
   const navigate = useNavigate()
   const [, setCurrentTab] = useAtom(currentTabAtom)
-  const [waitingCount] = useAtom(waitingCountAtom)
-  const [processCount] = useAtom(processCountAtom)
-  const [historyCount] = useAtom(historyCountAtom)
+  const [waitingCount, setWaitingCount] = useAtom(waitingCountAtom)
+  const [processCount, setProcessCount] = useAtom(processCountAtom)
+  const [historyCount, setHistoryCount] = useAtom(historyCountAtom)
 
   const navBarItem = [
     {
@@ -37,6 +39,28 @@ export default function Layout() {
     setCurrentTab(pathname)
     navigate(pathname)
   }
+
+  const { data: orderList } = useGetPaymentHistory()
+
+  useEffect(() => {
+    setWaitingCount(
+      orderList?.reduce(
+        (acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length,
+        0,
+      ) ?? 0,
+    )
+    setProcessCount(
+      orderList?.reduce(
+        (acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'APPROVED').length,
+        0,
+      ) ?? 0,
+    )
+    setHistoryCount(
+      orderList
+        ?.filter(orders => orders.status === 'HISTORY')
+        .reduce((acc, cur) => acc + cur.orderHistoryResponseDtoList.length, 0) ?? 0,
+    )
+  }, [orderList])
 
   return (
     <Container>
