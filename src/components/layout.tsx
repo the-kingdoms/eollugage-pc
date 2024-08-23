@@ -51,7 +51,7 @@ export default function Layout() {
     )
     setProcessCount(
       orderList?.reduce(
-        (acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'APPROVED').length,
+        (acc, cur) => acc + (cur.orderHistoryResponseDtoList.some(order => order.status === 'APPROVED') ? 1 : 0),
         0,
       ) ?? 0,
     )
