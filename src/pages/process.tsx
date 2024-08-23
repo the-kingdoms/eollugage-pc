@@ -17,10 +17,6 @@ export default function ProcessMain() {
     return orders.orderHistoryResponseDtoList.slice(1).map(order => parseOrder(order.orderDetail))
   }
 
-  console.log(
-    orderList?.filter(orders => orders.orderHistoryResponseDtoList.filter(order => order.status === 'APPROVED')),
-  )
-
   return (
     <Container>
       <TabTitle>진행 중 {processCount}</TabTitle>

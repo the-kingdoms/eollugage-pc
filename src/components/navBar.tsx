@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import NavBarItem from './navBarItem'
 import styled from 'styled-components'
 import { useAtom } from 'jotai'
 import { currentTabAtom } from 'utils/atom'
-import { ROUTE } from 'constants/path'
 
 type VerticalNavProps = {
   items: { name: string; count?: number; label: string; onClick: () => void }[]
