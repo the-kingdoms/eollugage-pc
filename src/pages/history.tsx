@@ -1,16 +1,19 @@
 import HistoryDateFilter from 'components/historyDateFilter'
 import OrderCard from 'components/orderCard'
-import { orderlist } from 'pages/process'
 import { useState } from 'react'
 import { Container, CardContainer, TabTitle } from 'styles/shared'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { historyCountAtom } from 'utils/atom'
+import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
+import { parseOrder } from 'utils/parseOrderDetail'
 
 export default function HistoryMain() {
   const [historyCount] = useAtom(historyCountAtom)
   const [date, setDate] = useState<string>(dayjs().format('YYYY.MM.DD'))
+
+  const { data: orderList } = useGetPaymentHistory()
 
   return (
     <Container>
@@ -18,8 +21,17 @@ export default function HistoryMain() {
       <HistoryDateFilter date={date} setDate={setDate} />
       <DateText>{date}</DateText>
       <CardContainer>
-        <OrderCard status="multi" tableNumber={2} orders={orderlist} prevOrders={orderlist} />
-        <OrderCard status="single" tableNumber={2} orders={orderlist} />
+        {orderList
+          ?.filter(orders => orders.status === 'HISTORY')
+          .map(orders => (
+            <OrderCard
+              status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
+              tableNumber={orders.tableNumber}
+              totalPrice={orders.totalPrice}
+              orders={parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail)}
+              prevOrders={orders.orderHistoryResponseDtoList.slice(1).map(order => parseOrder(order.orderDetail))}
+            />
+          ))}
       </CardContainer>
     </Container>
   )
