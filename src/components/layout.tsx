@@ -16,16 +16,19 @@ export default function Layout() {
     {
       name: '승인 대기',
       count: waitingCount,
+      label: ROUTE.WAITING_MAIN,
       onClick: () => onClickTab(ROUTE.WAITING_MAIN),
     },
     {
       name: '진행 중',
       count: processCount,
+      label: ROUTE.PROCESS_MAIN,
       onClick: () => onClickTab(ROUTE.PROCESS_MAIN),
     },
     {
       name: '히스토리',
       count: historyCount,
+      label: ROUTE.HISTORY_MAIN,
       onClick: () => onClickTab(ROUTE.HISTORY_MAIN),
     },
   ]
