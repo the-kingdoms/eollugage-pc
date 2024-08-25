@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { orderType } from './orderCard'
 import { returnOrderDetail } from 'utils/cardFunc'
 import { Menu } from 'utils/type'
 

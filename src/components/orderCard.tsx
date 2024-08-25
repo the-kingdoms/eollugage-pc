@@ -19,13 +19,14 @@ export type orderType = productType & {
 
 interface OrderCardProps {
   tableNumber: number
+  time: string
   totalPrice: number
   status: statusType
   orders: Menu[]
   prevOrders?: Menu[][]
 }
 
-export default function OrderCard({ tableNumber, totalPrice, status, orders, prevOrders }: OrderCardProps) {
+export default function OrderCard({ tableNumber, time, totalPrice, status, orders, prevOrders }: OrderCardProps) {
   const pathname = window.location.pathname
 
   const [showDetail, setShowDetail] = useState<boolean>(false)
@@ -39,7 +40,9 @@ export default function OrderCard({ tableNumber, totalPrice, status, orders, pre
           <OrderChip status={status} />
         </TitleContainer>
         <TimeText>
-          {pathname === ROUTE.WAITING_MAIN ? '0분 전' : dayjs().locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}
+          {pathname === ROUTE.WAITING_MAIN
+            ? dayjs(time).diff(dayjs(), 'minute') + '분'
+            : dayjs(time).locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}
           {pathname === ROUTE.HISTORY_MAIN && ' 결제 완료'}
         </TimeText>
       </Top>
