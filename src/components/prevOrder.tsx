@@ -2,7 +2,6 @@ import React, { SetStateAction } from 'react'
 import styled from 'styled-components'
 import { Container as OrderContainer, Detail as OrderDetail } from './orderDetail'
 import { returnOrderDetail, returnTotalPrice } from 'utils/cardFunc'
-import { ReactComponent as UpArrowIcon } from 'assets/image/up-arrow.svg'
 import { ReactComponent as DownArrowIcon } from 'assets/image/down-arrow.svg'
 import { Menu } from 'utils/type'
 import { Variants, motion } from 'framer-motion'
@@ -18,6 +17,10 @@ const iconVariants: Variants = {
   },
 }
 
+const orderBoxVariants: Variants = {
+  notShow: { opacity: 0 },
+  show: { opacity: 1 },
+}
 
 interface PreviousOrderProps {
   orders: Menu[][]
@@ -46,7 +49,13 @@ export default function PreviousOrder({ orders, showDetail, setShowDetail, showL
         </ShowButton>
       )}
       {showDetail && (
-        <OrderBox>
+        <OrderBox
+          variants={orderBoxVariants}
+          initial="notShow"
+          exit="notShow"
+          animate={showDetail ? 'show' : 'notShow'}
+          transition={{ duration: 0.15, ease: 'easeInOut' }}
+        >
           {orders.map(order => (
             <PrevOrderContainer>
               <OrderContainer>
@@ -76,7 +85,7 @@ const ShowButton = styled.div`
   gap: 8px;
   cursor: pointer;
 `
-const OrderBox = styled.div`
+const OrderBox = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 24px;
