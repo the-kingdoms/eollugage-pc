@@ -15,6 +15,8 @@ export interface OrderHistory {
   paymentHistoryId: number
   orderDetail: string
   totalPrice: number
+  createdAt: string
+  updatedAt: string | null
   status: 'APPROVED' | 'PENDING' | 'DISAPPROVED'
 }
 
