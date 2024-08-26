@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { ReactComponent as Logo } from 'assets/image/eollugage-logo.svg'
-import KakaoLogin from 'components/kakaoButton'
+import KakaoButton from 'components/kakaoButton'
 
 export default function Login() {
   return (
@@ -11,7 +11,7 @@ export default function Login() {
           <Logo />
           간편하게 일하는 법
         </Title>
-        <KakaoLogin />
+        <KakaoButton />
       </Right>
     </Container>
   )

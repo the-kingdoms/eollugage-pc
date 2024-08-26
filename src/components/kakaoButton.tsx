@@ -1,9 +1,12 @@
 import styled from 'styled-components'
+import { createRandomString } from 'utils/createRandomId'
 
-export default function KakaoLogin() {
+export default function KakaoButton() {
   const redirectUri = `${window.location.origin}/oauth`
   const onClickLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?redirect_uri=${redirectUri}&client_id=${process.env.REACT_APP_KAKAO_REST_KEY}&response_type=code`
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?redirect_uri=${redirectUri}&client_id=${
+      process.env.REACT_APP_KAKAO_REST_KEY
+    }&response_type=code&state=${createRandomString(8)}`
   }
 
   return (
