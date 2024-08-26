@@ -10,13 +10,11 @@ export const returnMenuPrice = (order: Menu) => {
 }
 
 export const returnOptions = (options: productType[] | undefined) => {
-  if (options === undefined) return ''
+  if (options?.length === 0 || options === undefined) return ''
 
   return ' | '.concat(options?.map(option => `${option.name} (+${option.price}원)`).join(', '))
 }
 
 export const returnOrderDetail = (order: Menu) => {
-  return `${order.name} ${order.count === undefined ? '1' : order.count}개 ${returnOptions(
-    order.options,
-  )} | ${returnMenuPrice(order).toLocaleString()}원`
+  return `${order.name} ${order.count}개 ${returnOptions(order.options)} | ${returnMenuPrice(order).toLocaleString()}원`
 }
