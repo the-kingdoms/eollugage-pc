@@ -26,6 +26,7 @@ export default function HistoryMain() {
           .map(orders => (
             <OrderCard
               status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
+              time={orders.paidAt ?? ''}
               tableNumber={orders.tableNumber}
               totalPrice={orders.totalPrice}
               orders={parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail)}

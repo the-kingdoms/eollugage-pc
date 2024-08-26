@@ -25,12 +25,15 @@ export default function WaitMain() {
         {orderList?.map(orders =>
           orders.orderHistoryResponseDtoList
             .filter(order => order.status === 'PENDING')
-            .map((eachOrder, i) => (
+            .map((order, i) => (
               <OrderCard
+                orderHistoryId={order.orderHistoryId}
+                paymentHistoryId={order.paymentHistoryId}
                 status={returnStatus(orders, i)}
+                time={order.createdAt}
                 tableNumber={orders.tableNumber}
-                totalPrice={eachOrder.totalPrice}
-                orders={parseOrder(eachOrder.orderDetail)}
+                totalPrice={order.totalPrice}
+                orders={parseOrder(order.orderDetail)}
               />
             )),
         )}

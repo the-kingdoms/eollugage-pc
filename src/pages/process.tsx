@@ -1,5 +1,6 @@
 import { PaymentHistory } from 'apis/paymentHistory'
 import OrderCard from 'components/orderCard'
+import dayjs from 'dayjs'
 import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
 import { useAtom } from 'jotai'
 import { Container, CardContainer, TabTitle } from 'styles/shared'
@@ -17,6 +18,14 @@ export default function ProcessMain() {
     return orders.orderHistoryResponseDtoList.slice(1).map(order => parseOrder(order.orderDetail))
   }
 
+  const returnLatestTime = (orders: PaymentHistory) => {
+    const times = orders.orderHistoryResponseDtoList
+      .map(order => order.updatedAt)
+      .sort((a, b) => dayjs(b).diff(dayjs(a)))
+
+    return times[0] ?? ''
+  }
+
   return (
     <Container>
       <TabTitle>진행 중 {processCount}</TabTitle>
@@ -31,8 +40,10 @@ export default function ProcessMain() {
           .filter(orders => orders.orderHistoryResponseDtoList.length > 0)
           .map(orders => (
             <OrderCard
+              paymentHistoryId={orders.paymentHistoryId}
               status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
               tableNumber={orders.tableNumber}
+              time={returnLatestTime(orders)}
               totalPrice={returnTotalPrice(parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail))}
               orders={parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail)}
               prevOrders={returnPrevOrders(orders)}

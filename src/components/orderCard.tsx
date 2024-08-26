@@ -6,6 +6,7 @@ import OrderDetail from './orderDetail'
 import { useState } from 'react'
 import { ROUTE } from 'constants/path'
 import { Menu } from 'utils/type'
+import { usePatchPaymentHistory } from 'hooks/apis/paymentHistory'
 
 export type productType = {
   name: string
@@ -18,6 +19,8 @@ export type orderType = productType & {
 }
 
 interface OrderCardProps {
+  paymentHistoryId?: string
+  orderHistoryId?: string
   tableNumber: number
   time: string
   totalPrice: number
@@ -26,11 +29,22 @@ interface OrderCardProps {
   prevOrders?: Menu[][]
 }
 
-export default function OrderCard({ tableNumber, time, totalPrice, status, orders, prevOrders }: OrderCardProps) {
+export default function OrderCard({
+  paymentHistoryId,
+  orderHistoryId,
+  tableNumber,
+  time,
+  totalPrice,
+  status,
+  orders,
+  prevOrders,
+}: OrderCardProps) {
   const pathname = window.location.pathname
 
   const [showDetail, setShowDetail] = useState<boolean>(false)
   const toggleShowDetail = () => setShowDetail(!showDetail)
+
+  const { mutate } = usePatchPaymentHistory()
 
   return (
     <Container>
@@ -41,7 +55,7 @@ export default function OrderCard({ tableNumber, time, totalPrice, status, order
         </TitleContainer>
         <TimeText>
           {pathname === ROUTE.WAITING_MAIN
-            ? dayjs(time).diff(dayjs(), 'minute') + '분'
+            ? dayjs(time).diff(dayjs(), 'minute') + '분 전'
             : dayjs(time).locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}
           {pathname === ROUTE.HISTORY_MAIN && ' 결제 완료'}
         </TimeText>
