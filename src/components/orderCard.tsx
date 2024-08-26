@@ -46,6 +46,10 @@ export default function OrderCard({
 
   const { mutate } = usePatchPaymentHistory()
 
+  const onClickOrder = (nextStatus: string) => {
+    if (paymentHistoryId && orderHistoryId) mutate({ paymentHistoryId, orderHistoryId, status: nextStatus })
+  }
+
   return (
     <Container>
       <Top>
@@ -76,11 +80,11 @@ export default function OrderCard({
       <ButtonContainer>
         {pathname === ROUTE.WAITING_MAIN && (
           <>
-            <WhiteButton>주문 거절</WhiteButton>
-            <BlackButton>주문 승인</BlackButton>
+            <WhiteButton onClick={() => onClickOrder('DENIED')}>주문 거절</WhiteButton>
+            <BlackButton onClick={() => onClickOrder('APPROVED')}>주문 승인</BlackButton>
           </>
         )}
-        {pathname === ROUTE.PROCESS_MAIN && <BlackButton>결제 완료</BlackButton>}
+        {pathname === ROUTE.PROCESS_MAIN && <BlackButton onClick={() => onClickOrder('DONE')}>결제 완료</BlackButton>}
         {pathname === ROUTE.HISTORY_MAIN && status === 'multi' && (
           <BlackButton onClick={toggleShowDetail}>{showDetail ? '최초 주문만 보기' : '이전 주문 보기'}</BlackButton>
         )}

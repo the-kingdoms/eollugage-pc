@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
 import { useAtom } from 'jotai'
 import { storeIdAtom } from 'utils/atom'
@@ -14,6 +14,7 @@ function useGetPaymentHistory() {
 }
 
 function usePatchPaymentHistory() {
+  const queryClient = useQueryClient()
   const [storeId] = useAtom(storeIdAtom)
 
   interface PatchParameterType {
@@ -26,6 +27,7 @@ function usePatchPaymentHistory() {
     mutationKey: ['patchPaymentHistory'],
     mutationFn: ({ orderHistoryId, paymentHistoryId, status }: PatchParameterType) =>
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, status),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['getPaymentHistory'] }),
   })
   return { mutate, isSuccess }
 }
