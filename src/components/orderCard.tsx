@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import OrderChip, { statusType } from './orderChip'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import PreviousOrder from './prevOrder'
 import OrderDetail from './orderDetail'
 import { useState } from 'react'
@@ -28,6 +29,8 @@ interface OrderCardProps {
   orders: Menu[]
   prevOrders?: Menu[][]
 }
+
+dayjs.extend(utc)
 
 export default function OrderCard({
   paymentHistoryId,
@@ -59,7 +62,7 @@ export default function OrderCard({
         </TitleContainer>
         <TimeText>
           {pathname === ROUTE.WAITING_MAIN
-            ? dayjs(time).diff(dayjs(), 'minute') + '분 전'
+            ? dayjs().utc().diff(dayjs.utc(time), 'minute') + '분 전'
             : dayjs(time).locale('ko').format('YYYY년 M월 D일 HH시 mm분 ss초')}
           {pathname === ROUTE.HISTORY_MAIN && ' 결제 완료'}
         </TimeText>
