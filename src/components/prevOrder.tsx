@@ -7,19 +7,13 @@ import { Menu } from 'utils/type'
 import { Variants, motion } from 'framer-motion'
 
 const iconVariants: Variants = {
-  notShow: {
-    transform: 'rotate(0deg)',
-    transition: { duration: 0.1 },
-  },
-  show: {
-    transform: 'rotate(180deg)',
-    transition: { duration: 0.1 },
-  },
+  notShow: { transform: 'scaleY(1)', transition: { duration: 0.4 } },
+  show: { transform: 'scaleY(-1)', transition: { duration: 0.4 } },
 }
 
 const orderBoxVariants: Variants = {
-  notShow: { opacity: 0 },
-  show: { opacity: 1 },
+  notShow: { opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
+  show: { opacity: 1, transition: { duration: 0.3, ease: 'easeInOut' } },
 }
 
 interface PreviousOrderProps {
