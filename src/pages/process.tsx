@@ -11,7 +11,7 @@ import { parseOrder } from 'utils/parseOrderDetail'
 export default function ProcessMain() {
   const [processCount] = useAtom(processCountAtom)
 
-  const { data: orderList } = useGetPaymentHistory()
+  const { data: orderList } = useGetPaymentHistory('PROCESS')
 
   const returnPrevOrders = (orders: PaymentHistory) => {
     if (orders.orderHistoryResponseDtoList.length <= 1) return undefined
