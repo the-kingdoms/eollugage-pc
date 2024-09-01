@@ -65,9 +65,7 @@ export default function OrderCard({
       grayButtonText: '안 할래요',
       blackButtonText: '할래요',
       onClickGrayButton: () => setModalShow(false),
-      onClickBlackButton: () => {
-        if (paymentHistoryId && orderHistoryId) mutate({ paymentHistoryId, orderHistoryId, status: 'DENIED' })
-      },
+      onClickBlackButton: () => onClickOrder('DENIED'),
     })
     setModalShow(true)
   }
