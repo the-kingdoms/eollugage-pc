@@ -27,6 +27,12 @@ export default function HistoryMain() {
         <CardContainer>
           {orderList
             ?.filter(orders => orders.status === 'HISTORY')
+            ?.map(orders => ({
+              ...orders,
+              orderHistoryResponseDtoList: orders.orderHistoryResponseDtoList.sort((a, b) =>
+                dayjs(b.updatedAt).diff(a.updatedAt),
+              ),
+            }))
             .sort((a, b) => dayjs(a.paidAt).diff(b.paidAt))
             .map(orders => (
               <OrderCard
