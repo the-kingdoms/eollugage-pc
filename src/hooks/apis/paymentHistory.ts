@@ -30,8 +30,7 @@ function useGetWaitingOrder() {
       if (newWaitingCount > waitingCount) soundPlay()
       setWaitingCount(newWaitingCount)
 
-      // prettier-ignore
-      setProcessCount(data?.reduce((acc, cur) => acc + (cur.orderHistoryResponseDtoList.some(order => order.status === 'APPROVED') ? 1 : 0), 0) ?? 0)
+      setProcessCount(data?.reduce((acc, cur) => acc + (cur.status === 'PROCESS' ? 1 : 0), 0) ?? 0)
     }
     // eslint-disable-next-line
   }, [data])
