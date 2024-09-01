@@ -11,6 +11,7 @@ import { Menu } from 'utils/type'
 import { usePatchPaymentHistory } from 'hooks/apis/paymentHistory'
 import { useAtom } from 'jotai'
 import { modalDetailAtom, modalShowAtom } from 'utils/atom'
+import { returnTime } from 'utils/order'
 
 export type productType = {
   name: string
@@ -81,7 +82,7 @@ export default function OrderCard({
         </TitleContainer>
         <TimeText>
           {pathname === ROUTE.WAITING_MAIN
-            ? dayjs().utc().diff(dayjs.utc(time), 'minute') + '분 전'
+            ? returnTime(time)
             : dayjs.utc(time).tz('Asia/Seoul').format('YYYY년 M월 D일 HH시 mm분 ss초')}
           {pathname === ROUTE.HISTORY_MAIN && ' 결제 완료'}
         </TimeText>

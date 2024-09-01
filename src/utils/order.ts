@@ -1,12 +1,15 @@
 import { statusType } from '@components/orderChip'
 import { OrderHistory, PaymentHistory } from 'apis/paymentHistory'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
 interface SortedOrderType extends OrderHistory {
   totalPrice: number
   tableNumber: number
   state: statusType
 }
+
+dayjs.extend(utc)
 
 export const sortOrder = (payments: PaymentHistory[] | undefined, status: string) => {
   if (payments === undefined) return []
@@ -38,4 +41,12 @@ const returnStatus = (orders: PaymentHistory, currentOrder: OrderHistory) => {
   }
 
   return 'new'
+}
+
+export const returnTime = (time: string) => {
+  const diff = dayjs().utc().diff(dayjs.utc(time), 'minute')
+
+  if (diff > 1440) return dayjs().utc().diff(dayjs.utc(time), 'day') + '일 전'
+  else if (diff > 60) return dayjs().utc().diff(dayjs.utc(time), 'hour') + '시간 전'
+  return diff + '분 전'
 }
