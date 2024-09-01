@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { returnOrderDetail } from 'utils/cardFunc'
+import { returnOrderDetail } from 'utils/order'
 import { Menu } from 'utils/type'
 
 interface OrderDetailProps {

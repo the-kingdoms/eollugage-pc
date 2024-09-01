@@ -1,10 +1,10 @@
 import React, { SetStateAction } from 'react'
 import styled from 'styled-components'
 import { Container as OrderContainer, Detail as OrderDetail } from './orderDetail'
-import { returnOrderDetail, returnTotalPrice } from 'utils/cardFunc'
 import { ReactComponent as DownArrowIcon } from 'assets/image/down-arrow.svg'
 import { Menu } from 'utils/type'
 import { Variants, motion } from 'framer-motion'
+import { returnOrderDetail, returnTotalPrice } from 'utils/order'
 
 const iconVariants: Variants = {
   notShow: { transform: 'scaleY(1)', transition: { duration: 0.4 } },

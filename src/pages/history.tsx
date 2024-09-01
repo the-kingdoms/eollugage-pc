@@ -6,8 +6,8 @@ import styled from 'styled-components'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
-import { parseOrder } from 'utils/parseOrderDetail'
 import { OrbitProgress } from 'react-loading-indicators'
+import { parseOrder } from 'utils/order'
 
 export default function HistoryMain() {
   const [date, setDate] = useState<string>(dayjs().format('YYYY.MM.DD'))

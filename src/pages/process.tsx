@@ -5,8 +5,7 @@ import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
 import { useAtom } from 'jotai'
 import { Container, CardContainer, TabTitle, Loading } from 'styles/shared'
 import { processCountAtom } from 'utils/atom'
-import { returnTotalPrice } from 'utils/cardFunc'
-import { parseOrder } from 'utils/parseOrderDetail'
+import { parseOrder, returnTotalPrice } from 'utils/order'
 import { OrbitProgress } from 'react-loading-indicators'
 
 export default function ProcessMain() {
