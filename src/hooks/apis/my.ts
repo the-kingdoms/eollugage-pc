@@ -19,6 +19,7 @@ function useGetMy(queryClient?: QueryClient) {
       setStoreId(query.data.storeList[0].storeId)
       navigate(ROUTE.WAITING_MAIN)
     }
+    // eslint-disable-next-line
   }, [query.isSuccess])
 
   return query.refetch

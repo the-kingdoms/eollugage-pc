@@ -19,6 +19,7 @@ export default function Redirect() {
       })
       hasMutated.current = true
     }
+    // eslint-disable-next-line
   }, [])
 
   return <div>로그인 중..</div>

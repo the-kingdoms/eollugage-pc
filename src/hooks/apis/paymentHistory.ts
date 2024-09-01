@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
@@ -33,6 +33,7 @@ function useGetWaitingOrder() {
       // prettier-ignore
       setProcessCount(data?.reduce((acc, cur) => acc + (cur.orderHistoryResponseDtoList.some(order => order.status === 'APPROVED') ? 1 : 0), 0) ?? 0)
     }
+    // eslint-disable-next-line
   }, [data])
 
   return { data, isLoading }

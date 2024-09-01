@@ -4,8 +4,6 @@ import NavBar from './navBar'
 import { useAtom } from 'jotai'
 import { currentTabAtom, modalDetailAtom, modalShowAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
 import { ROUTE } from 'constants/path'
-import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
-import { useEffect } from 'react'
 import Modal from './modal'
 
 export default function Layout() {
