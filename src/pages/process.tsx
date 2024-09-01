@@ -33,14 +33,18 @@ export default function ProcessMain() {
         {orderList
           ?.map(orders => ({
             ...orders,
-            orderHistoryResponseDtoList: orders.orderHistoryResponseDtoList.filter(
-              order => order.status === 'APPROVED',
-            ),
+            orderHistoryResponseDtoList: orders.orderHistoryResponseDtoList
+              .filter(order => order.status === 'APPROVED')
+              .sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt)),
           }))
           .filter(orders => orders.orderHistoryResponseDtoList.length > 0)
+          .sort((a, b) =>
+            dayjs(b.orderHistoryResponseDtoList[0].updatedAt).diff(a.orderHistoryResponseDtoList[0].updatedAt),
+          )
           .map(orders => (
             <OrderCard
               paymentHistoryId={orders.paymentHistoryId}
+              orderHistoryId={orders.orderHistoryResponseDtoList[0].orderHistoryId}
               status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
               tableNumber={orders.tableNumber}
               time={returnLatestTime(orders)}
