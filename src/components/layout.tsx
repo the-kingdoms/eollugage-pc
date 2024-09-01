@@ -2,10 +2,18 @@ import { Outlet, useNavigate } from 'react-router'
 import styled from 'styled-components'
 import NavBar from './navBar'
 import { useAtom } from 'jotai'
-import { currentTabAtom, historyCountAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
+import {
+  currentTabAtom,
+  historyCountAtom,
+  modalDetailAtom,
+  modalShowAtom,
+  processCountAtom,
+  waitingCountAtom,
+} from 'utils/atom'
 import { ROUTE } from 'constants/path'
 import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
 import { useEffect } from 'react'
+import Modal from './modal'
 
 export default function Layout() {
   const navigate = useNavigate()
@@ -13,6 +21,8 @@ export default function Layout() {
   const [waitingCount, setWaitingCount] = useAtom(waitingCountAtom)
   const [processCount, setProcessCount] = useAtom(processCountAtom)
   const [historyCount, setHistoryCount] = useAtom(historyCountAtom)
+  const [modalDetail] = useAtom(modalDetailAtom)
+  const [modalShow] = useAtom(modalShowAtom)
 
   const navBarItem = [
     {
@@ -64,6 +74,16 @@ export default function Layout() {
 
   return (
     <Container>
+      {modalShow && (
+        <Modal
+          title={modalDetail?.title}
+          description={modalDetail?.description}
+          grayButtonText={modalDetail?.grayButtonText}
+          blackButtonText={modalDetail?.blackButtonText}
+          onClickGrayButton={modalDetail?.onClickGrayButton}
+          onClickBlackButton={modalDetail?.onClickBlackButton}
+        />
+      )}
       <NavWrapper>
         <NavBar items={navBarItem} />
       </NavWrapper>

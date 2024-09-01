@@ -8,6 +8,8 @@ import { useState } from 'react'
 import { ROUTE } from 'constants/path'
 import { Menu } from 'utils/type'
 import { usePatchPaymentHistory } from 'hooks/apis/paymentHistory'
+import { useAtom } from 'jotai'
+import { modalDetailAtom, modalShowAtom } from 'utils/atom'
 
 export type productType = {
   name: string
@@ -44,6 +46,9 @@ export default function OrderCard({
 }: OrderCardProps) {
   const pathname = window.location.pathname
 
+  const [, setModalDetail] = useAtom(modalDetailAtom)
+  const [, setModalShow] = useAtom(modalShowAtom)
+
   const [showDetail, setShowDetail] = useState<boolean>(false)
   const toggleShowDetail = () => setShowDetail(!showDetail)
 
@@ -51,6 +56,20 @@ export default function OrderCard({
 
   const onClickOrder = (nextStatus: string) => {
     if (paymentHistoryId && orderHistoryId) mutate({ paymentHistoryId, orderHistoryId, status: nextStatus })
+  }
+
+  const denyOrder = () => {
+    setModalDetail({
+      title: '주문 거절을 하시겠어요?',
+      description: '주문 거절을 하시고 거절 사유를 손님께 말씀해주세요.',
+      grayButtonText: '안 할래요',
+      blackButtonText: '할래요',
+      onClickGrayButton: () => setModalShow(false),
+      onClickBlackButton: () => {
+        if (paymentHistoryId && orderHistoryId) mutate({ paymentHistoryId, orderHistoryId, status: 'DENIED' })
+      },
+    })
+    setModalShow(true)
   }
 
   return (
@@ -83,7 +102,7 @@ export default function OrderCard({
       <ButtonContainer>
         {pathname === ROUTE.WAITING_MAIN && (
           <>
-            <WhiteButton onClick={() => onClickOrder('DENIED')}>주문 거절</WhiteButton>
+            <WhiteButton onClick={denyOrder}>주문 거절</WhiteButton>
             <BlackButton onClick={() => onClickOrder('APPROVED')}>주문 승인</BlackButton>
           </>
         )}

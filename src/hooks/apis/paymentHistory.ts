@@ -1,7 +1,7 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
 import { useAtom } from 'jotai'
-import { storeIdAtom } from 'utils/atom'
+import { modalShowAtom, storeIdAtom } from 'utils/atom'
 
 function useGetPaymentHistory() {
   const [storeId] = useAtom(storeIdAtom)
@@ -16,6 +16,7 @@ function useGetPaymentHistory() {
 function usePatchPaymentHistory() {
   const queryClient = useQueryClient()
   const [storeId] = useAtom(storeIdAtom)
+  const [, setModalShow] = useAtom(modalShowAtom)
 
   interface PatchParameterType {
     orderHistoryId: string
@@ -27,7 +28,10 @@ function usePatchPaymentHistory() {
     mutationKey: ['patchPaymentHistory'],
     mutationFn: ({ orderHistoryId, paymentHistoryId, status }: PatchParameterType) =>
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, status),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['getPaymentHistory'] }),
+    onSuccess: () => {
+      setModalShow(false)
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory'] })
+    },
   })
   return { mutate, isSuccess }
 }
