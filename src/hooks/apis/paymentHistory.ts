@@ -2,7 +2,10 @@ import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/re
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { modalShowAtom, processCountAtom, storeIdAtom, waitingCountAtom } from 'utils/atom'
+import { modalDetailAtom, modalShowAtom, processCountAtom, storeIdAtom, waitingCountAtom } from 'utils/atom'
+import { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { ROUTE } from 'constants/path'
 
 function useGetPaymentHistory(status?: string, filter?: string) {
   const [storeId] = useAtom(storeIdAtom)
@@ -38,8 +41,11 @@ function useGetPaymentHistory(status?: string, filter?: string) {
 
 function usePatchPaymentHistory() {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
   const [storeId] = useAtom(storeIdAtom)
   const [, setModalShow] = useAtom(modalShowAtom)
+  const [, setModalDetail] = useAtom(modalDetailAtom)
 
   interface PatchParameterType {
     orderHistoryId: string
@@ -47,7 +53,7 @@ function usePatchPaymentHistory() {
     status: string
   }
 
-  const { mutate, isSuccess } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ['patchPaymentHistory'],
     mutationFn: ({ orderHistoryId, paymentHistoryId, status }: PatchParameterType) =>
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, status),
@@ -55,8 +61,25 @@ function usePatchPaymentHistory() {
       setModalShow(false)
       queryClient.invalidateQueries({ queryKey: ['getPaymentHistory'] })
     },
+    onError: (error, variables) => {
+      const axiosError = error as AxiosError
+      const { paymentHistoryId } = variables as PatchParameterType
+      if (axiosError.response?.status === 400)
+        setModalDetail({
+          title: '테이블 주문을 먼저 수락해주세요.',
+          description: '결제하기 전에 아직 승인 대기 중인 주문이 있습니다.',
+          grayButtonText: '닫기',
+          blackButtonText: '주문 내역 확인',
+          onClickGrayButton: () => setModalShow(false),
+          onClickBlackButton: () => {
+            setModalShow(false)
+            navigate(ROUTE.WAITING_MAIN, { state: paymentHistoryId })
+          },
+        })
+      setModalShow(true)
+    },
   })
-  return { mutate, isSuccess }
+  return { mutate }
 }
 
 export { useGetPaymentHistory, usePatchPaymentHistory }
