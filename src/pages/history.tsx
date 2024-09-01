@@ -5,19 +5,17 @@ import { Container, CardContainer, TabTitle } from 'styles/shared'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
-import { historyCountAtom } from 'utils/atom'
 import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
 import { parseOrder } from 'utils/parseOrderDetail'
 
 export default function HistoryMain() {
-  const [historyCount] = useAtom(historyCountAtom)
   const [date, setDate] = useState<string>(dayjs().format('YYYY.MM.DD'))
 
   const { data: orderList } = useGetPaymentHistory()
 
   return (
     <Container>
-      <TabTitle>히스토리 {historyCount}</TabTitle>
+      <TabTitle>히스토리</TabTitle>
       <HistoryDateFilter date={date} setDate={setDate} />
       <DateText>{date}</DateText>
       <CardContainer>
