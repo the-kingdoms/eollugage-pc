@@ -10,13 +10,14 @@ import { parseOrder } from 'utils/parseOrderDetail'
 
 export default function HistoryMain() {
   const [date, setDate] = useState<string>(dayjs().format('YYYY.MM.DD'))
+  const [filter, setFilter] = useState<string>('TODAY')
 
-  const { data: orderList } = useGetPaymentHistory()
+  const { data: orderList } = useGetPaymentHistory('HISTORY', filter)
 
   return (
     <Container>
       <TabTitle>히스토리</TabTitle>
-      <HistoryDateFilter date={date} setDate={setDate} />
+      <HistoryDateFilter date={date} setDate={setDate} filter={filter} setFilter={setFilter} />
       <DateText>{date}</DateText>
       <CardContainer>
         {orderList

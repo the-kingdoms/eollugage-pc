@@ -1,42 +1,49 @@
 import dayjs from 'dayjs'
-import React, { SetStateAction, useState } from 'react'
+import React, { SetStateAction } from 'react'
 import styled from 'styled-components'
 
-const buttonText = ['오늘', '1주', '1개월']
+const buttonText = [
+  { label: '오늘', value: 'TODAY' },
+  { label: '1주', value: 'WEEK' },
+  { label: '1개월', value: 'MONTH' },
+]
 
 interface HistoryDateFilterProps {
   date: string
   setDate: React.Dispatch<SetStateAction<string>>
+  filter: string
+  setFilter: React.Dispatch<SetStateAction<string>>
 }
 
-export default function HistoryDateFilter({ date, setDate }: HistoryDateFilterProps) {
-  const [selectedIdx, setSelectedIdx] = useState<number>(0)
-
-  const onClickDate = (index: number) => {
-    setSelectedIdx(index)
-    switch (index) {
-      case 0:
+export default function HistoryDateFilter({ date, setDate, filter, setFilter }: HistoryDateFilterProps) {
+  const onClickDate = (value: string) => {
+    switch (value) {
+      case 'TODAY':
         setDate(dayjs().format('YYYY.MM.DD'))
+        setFilter('TODAY')
         break
-      case 1:
+      case 'WEEK':
         setDate(dayjs().subtract(1, 'week').format('YYYY.MM.DD') + ' - ' + dayjs().format('YYYY.MM.DD'))
+        setFilter('WEEK')
         break
-      case 2:
+      case 'MONTH':
         setDate(dayjs().subtract(1, 'month').format('YYYY.MM.DD') + ' - ' + dayjs().format('YYYY.MM.DD'))
+        setFilter('MONTH')
         break
       default:
         setDate('error')
+        setFilter('ALL')
     }
   }
 
   return (
     <Container>
-      {buttonText.map((text, i) => (
-        <DateButton selected={i === selectedIdx} onClick={() => onClickDate(i)}>
-          {text}
+      {buttonText.map((button, i) => (
+        <DateButton selected={button.value === filter} onClick={() => onClickDate(button.value)}>
+          {button.label}
         </DateButton>
       ))}
-      <DateInput type="date" value={dayjs(date).format('YYYY-MM-DD')} defaultValue={dayjs(date).format('YYYY-MM-DD')} />
+      <DateInput type="date" value={dayjs().format('YYYY-MM-DD')} defaultValue={dayjs().format('YYYY-MM-DD')} />
     </Container>
   )
 }
