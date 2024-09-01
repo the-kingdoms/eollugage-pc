@@ -15,6 +15,8 @@ function useGetPaymentHistory(status?: string, filter?: string) {
   const { data, isLoading } = useQuery({
     queryKey: ['getPaymentHistory', status, filter],
     queryFn: () => getPaymentHistory(storeId, status, filter),
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
   })
 
   useEffect(() => {
