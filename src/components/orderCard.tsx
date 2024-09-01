@@ -55,7 +55,7 @@ export default function OrderCard({
   const [showDetail, setShowDetail] = useState<boolean>(false)
   const toggleShowDetail = () => setShowDetail(!showDetail)
 
-  const { mutate } = usePatchPaymentHistory()
+  const { mutate } = usePatchPaymentHistory(tableNumber)
 
   const onClickOrder = (nextStatus: string) => {
     if (paymentHistoryId && orderHistoryId) mutate({ paymentHistoryId, orderHistoryId, status: nextStatus })

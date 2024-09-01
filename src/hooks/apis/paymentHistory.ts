@@ -47,7 +47,7 @@ function useGetPaymentHistory(status?: string, filter?: string) {
   return { data, isLoading }
 }
 
-function usePatchPaymentHistory() {
+function usePatchPaymentHistory(tableNumber?: number) {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
@@ -74,8 +74,8 @@ function usePatchPaymentHistory() {
       const { paymentHistoryId } = variables as PatchParameterType
       if (axiosError.response?.status === 400)
         setModalDetail({
-          title: '테이블 주문을 먼저 수락해주세요.',
-          description: '결제하기 전에 아직 승인 대기 중인 주문이 있습니다.',
+          title: `${tableNumber}번 테이블 주문을 먼저 수락해주세요.`,
+          description: `결제하기 전에 ${tableNumber}테이블에서 아직 승인 대기 중인 주문이 있습니다.`,
           grayButtonText: '닫기',
           blackButtonText: '주문 내역 확인',
           onClickGrayButton: () => setModalShow(false),
