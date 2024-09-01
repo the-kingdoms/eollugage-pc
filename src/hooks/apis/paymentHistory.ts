@@ -6,11 +6,15 @@ import { modalDetailAtom, modalShowAtom, processCountAtom, storeIdAtom, waitingC
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE } from 'constants/path'
+import orderSound from 'assets/sound/newOrder.mp3'
+import useSound from 'use-sound'
 
 function useGetPaymentHistory(status?: string, filter?: string) {
   const [storeId] = useAtom(storeIdAtom)
-  const [, setWaitingCount] = useAtom(waitingCountAtom)
+  const [waitingCount, setWaitingCount] = useAtom(waitingCountAtom)
   const [, setProcessCount] = useAtom(processCountAtom)
+
+  const [soundPlay] = useSound(orderSound)
 
   const { data, isLoading } = useQuery({
     queryKey: ['getPaymentHistory', status, filter],
@@ -21,13 +25,15 @@ function useGetPaymentHistory(status?: string, filter?: string) {
 
   useEffect(() => {
     if (data) {
-      if (status === undefined)
-        setWaitingCount(
+      if (status === undefined) {
+        const newWaitingCount =
           data?.reduce(
             (acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length,
             0,
-          ) ?? 0,
-        )
+          ) ?? 0
+        if (newWaitingCount > waitingCount) soundPlay()
+        setWaitingCount(newWaitingCount)
+      }
 
       if (status !== 'HISTORY')
         setProcessCount(

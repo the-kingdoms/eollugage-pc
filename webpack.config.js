@@ -27,7 +27,19 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name].[hash].[ext]',
-              outputPath: 'images',
+              outputPath: 'assets/images/',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.mp3$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/sounds/',
             },
           },
         ],
