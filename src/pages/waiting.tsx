@@ -2,7 +2,7 @@ import OrderCard from 'components/orderCard'
 import { useAtom } from 'jotai'
 import { Container, CardContainer, TabTitle, Loading } from 'styles/shared'
 import { waitingCountAtom } from 'utils/atom'
-import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
+import { useGetPaymentHistory, useGetWaitingOrder } from 'hooks/apis/paymentHistory'
 import { parseOrder } from 'utils/parseOrderDetail'
 import { sortOrder } from 'utils/order'
 import { useLocation } from 'react-router-dom'
@@ -13,7 +13,7 @@ export default function WaitMain() {
   const location = useLocation()
   const [waitingCount] = useAtom(waitingCountAtom)
 
-  const { data: orderList, isLoading } = useGetPaymentHistory()
+  const { data: orderList, isLoading } = useGetWaitingOrder()
 
   useEffect(() => {
     if (location.state !== null) {

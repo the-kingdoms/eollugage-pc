@@ -9,7 +9,7 @@ import { ROUTE } from 'constants/path'
 import orderSound from 'assets/sound/newOrder.mp3'
 import useSound from 'use-sound'
 
-function useGetPaymentHistory(status?: string, filter?: string) {
+function useGetWaitingOrder() {
   const [storeId] = useAtom(storeIdAtom)
   const [waitingCount, setWaitingCount] = useAtom(waitingCountAtom)
   const [, setProcessCount] = useAtom(processCountAtom)
@@ -17,33 +17,35 @@ function useGetPaymentHistory(status?: string, filter?: string) {
   const [soundPlay] = useSound(orderSound)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['getPaymentHistory', status, filter],
-    queryFn: () => getPaymentHistory(storeId, status, filter),
+    queryKey: ['getWaitingOrder'],
+    queryFn: () => getPaymentHistory(storeId),
     refetchInterval: 5000,
     refetchIntervalInBackground: true,
   })
 
   useEffect(() => {
     if (data) {
-      if (status === undefined) {
-        const newWaitingCount =
-          data?.reduce(
-            (acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length,
-            0,
-          ) ?? 0
-        if (newWaitingCount > waitingCount) soundPlay()
-        setWaitingCount(newWaitingCount)
-      }
+      // prettier-ignore
+      const newWaitingCount = data?.reduce((acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length, 0) ?? 0
+      if (newWaitingCount > waitingCount) soundPlay()
+      setWaitingCount(newWaitingCount)
 
-      if (status !== 'HISTORY')
-        setProcessCount(
-          data?.reduce(
-            (acc, cur) => acc + (cur.orderHistoryResponseDtoList.some(order => order.status === 'APPROVED') ? 1 : 0),
-            0,
-          ) ?? 0,
-        )
+      // prettier-ignore
+      setProcessCount(data?.reduce((acc, cur) => acc + (cur.orderHistoryResponseDtoList.some(order => order.status === 'APPROVED') ? 1 : 0), 0) ?? 0)
     }
   }, [data])
+
+  return { data, isLoading }
+}
+
+function useGetPaymentHistory(status: string, filter?: string) {
+  const [storeId] = useAtom(storeIdAtom)
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['getPaymentHistory', status, filter],
+    queryFn: () => getPaymentHistory(storeId, status, filter),
+  })
+
   return { data, isLoading }
 }
 
@@ -67,7 +69,7 @@ function usePatchPaymentHistory(tableNumber?: number) {
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, status),
     onSuccess: () => {
       setModalShow(false)
-      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory'] })
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'getWaitingOrder'] })
     },
     onError: (error, variables) => {
       const axiosError = error as AxiosError
@@ -90,4 +92,4 @@ function usePatchPaymentHistory(tableNumber?: number) {
   return { mutate }
 }
 
-export { useGetPaymentHistory, usePatchPaymentHistory }
+export { useGetWaitingOrder, useGetPaymentHistory, usePatchPaymentHistory }
