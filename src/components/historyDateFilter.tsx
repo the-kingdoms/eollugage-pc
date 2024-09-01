@@ -29,10 +29,6 @@ export default function HistoryDateFilter({ date, setDate }: HistoryDateFilterPr
     }
   }
 
-  const onClickDateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(dayjs(event.target.value).format('YYYY.MM.DD'))
-  }
-
   return (
     <Container>
       {buttonText.map((text, i) => (
@@ -40,7 +36,7 @@ export default function HistoryDateFilter({ date, setDate }: HistoryDateFilterPr
           {text}
         </DateButton>
       ))}
-      <DateInput type="date" value={dayjs(date).format('YYYY.MM.DD')} onChange={onClickDateInput} />
+      <DateInput type="date" value={dayjs(date).format('YYYY-MM-DD')} defaultValue={dayjs(date).format('YYYY-MM-DD')} />
     </Container>
   )
 }
