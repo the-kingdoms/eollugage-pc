@@ -12,7 +12,7 @@ function useGetPaymentHistory(status?: string, filter?: string) {
   const [, setWaitingCount] = useAtom(waitingCountAtom)
   const [, setProcessCount] = useAtom(processCountAtom)
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['getPaymentHistory', status, filter],
     queryFn: () => getPaymentHistory(storeId, status, filter),
   })
@@ -36,7 +36,7 @@ function useGetPaymentHistory(status?: string, filter?: string) {
         )
     }
   }, [data])
-  return { data }
+  return { data, isLoading }
 }
 
 function usePatchPaymentHistory() {
