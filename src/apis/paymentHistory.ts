@@ -23,8 +23,9 @@ export interface OrderHistory {
 type PaymentHistoryStatus = 'WAITING' | 'PROCESS' | 'HISTORY'
 type OrderHistoryStatus = 'APPROVED' | 'PENDING' | 'DISAPPROVED' | 'HISTORY'
 
-async function getPaymentHistory(storeId: string): Promise<PaymentHistory[]> {
-  const { data } = await api.get(`/api/v1/stores/${storeId}/payment-histories`)
+async function getPaymentHistory(storeId: string, status?: string, filter: string = 'ALL'): Promise<PaymentHistory[]> {
+  const statusQuery = status ? `&status=${status}` : ''
+  const { data } = await api.get(`/api/v1/stores/${storeId}/payment-histories?filter=${filter}${statusQuery}`)
   return data
 }
 

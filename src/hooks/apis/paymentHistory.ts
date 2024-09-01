@@ -1,15 +1,38 @@
 import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
 import { useAtom } from 'jotai'
-import { modalShowAtom, storeIdAtom } from 'utils/atom'
+import { useEffect } from 'react'
+import { modalShowAtom, processCountAtom, storeIdAtom, waitingCountAtom } from 'utils/atom'
 
-function useGetPaymentHistory() {
+function useGetPaymentHistory(status?: string, filter?: string) {
   const [storeId] = useAtom(storeIdAtom)
+  const [, setWaitingCount] = useAtom(waitingCountAtom)
+  const [, setProcessCount] = useAtom(processCountAtom)
 
   const { data } = useQuery({
-    queryKey: ['getPaymentHistory'],
-    queryFn: () => getPaymentHistory(storeId),
+    queryKey: ['getPaymentHistory', status, filter],
+    queryFn: () => getPaymentHistory(storeId, status, filter),
   })
+
+  useEffect(() => {
+    if (data) {
+      if (status === undefined)
+        setWaitingCount(
+          data?.reduce(
+            (acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length,
+            0,
+          ) ?? 0,
+        )
+
+      if (status !== 'HISTORY')
+        setProcessCount(
+          data?.reduce(
+            (acc, cur) => acc + (cur.orderHistoryResponseDtoList.some(order => order.status === 'APPROVED') ? 1 : 0),
+            0,
+          ) ?? 0,
+        )
+    }
+  }, [data])
   return { data }
 }
 
