@@ -21,7 +21,7 @@ jobs:
         run: yarn install
 
       - name: Build React
-        run: yarn build
+        run: yarn env-build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
