@@ -11,7 +11,7 @@ import useSound from 'use-sound'
 
 function useGetWaitingOrder() {
   const [storeId] = useAtom(storeIdAtom)
-  const [waitingCount, setWaitingCount] = useAtom(waitingCountAtom)
+  const [, setWaitingCount] = useAtom(waitingCountAtom)
   const [, setProcessCount] = useAtom(processCountAtom)
 
   const [soundPlay] = useSound(orderSound)
@@ -26,9 +26,9 @@ function useGetWaitingOrder() {
   useEffect(() => {
     if (data) {
       // prettier-ignore
-      const newWaitingCount = data?.reduce((acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length, 0) ?? 0
-      if (newWaitingCount > waitingCount) soundPlay()
-      setWaitingCount(newWaitingCount)
+      const waitingCount = data?.reduce((acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length, 0) ?? 0
+      if (waitingCount > 0) soundPlay()
+      setWaitingCount(waitingCount)
 
       setProcessCount(data?.reduce((acc, cur) => acc + (cur.status === 'PROCESS' ? 1 : 0), 0) ?? 0)
     }
