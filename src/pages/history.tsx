@@ -1,26 +1,51 @@
 import HistoryDateFilter from 'components/historyDateFilter'
 import OrderCard from 'components/orderCard'
-import { orderlist } from 'pages/process'
 import { useState } from 'react'
-import { Container, CardContainer, TabTitle } from 'styles/shared'
+import { Container, CardContainer, TabTitle, Loading } from 'styles/shared'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
-import { historyCountAtom } from 'utils/atom'
+import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
+import { OrbitProgress } from 'react-loading-indicators'
+import { parseOrder } from 'utils/order'
 
 export default function HistoryMain() {
-  const [historyCount] = useAtom(historyCountAtom)
   const [date, setDate] = useState<string>(dayjs().format('YYYY.MM.DD'))
+  const [filter, setFilter] = useState<string>('TODAY')
+
+  const { data: orderList, isLoading } = useGetPaymentHistory('HISTORY', filter)
 
   return (
     <Container>
-      <TabTitle>히스토리 {historyCount}</TabTitle>
-      <HistoryDateFilter date={date} setDate={setDate} />
+      <TabTitle>히스토리</TabTitle>
+      <HistoryDateFilter date={date} setDate={setDate} filter={filter} setFilter={setFilter} />
       <DateText>{date}</DateText>
-      <CardContainer>
-        <OrderCard status="multi" tableNumber={2} orders={orderlist} prevOrders={orderlist} />
-        <OrderCard status="single" tableNumber={2} orders={orderlist} />
-      </CardContainer>
+      {isLoading ? (
+        <Loading>
+          <OrbitProgress color="#6f6f6f" size="small" />
+        </Loading>
+      ) : (
+        <CardContainer>
+          {orderList
+            ?.filter(orders => orders.status === 'HISTORY')
+            ?.map(orders => ({
+              ...orders,
+              orderHistoryResponseDtoList: orders.orderHistoryResponseDtoList.sort((a, b) =>
+                dayjs(b.updatedAt).diff(a.updatedAt),
+              ),
+            }))
+            .sort((a, b) => dayjs(a.paidAt).diff(b.paidAt))
+            .map(orders => (
+              <OrderCard
+                status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
+                time={orders.paidAt ?? ''}
+                tableNumber={orders.tableNumber}
+                totalPrice={orders.totalPrice}
+                orders={parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail)}
+                prevOrders={orders.orderHistoryResponseDtoList.slice(1).map(order => parseOrder(order.orderDetail))}
+              />
+            ))}
+        </CardContainer>
+      )}
     </Container>
   )
 }
