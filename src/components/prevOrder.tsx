@@ -1,13 +1,23 @@
 import React, { SetStateAction } from 'react'
-import { orderType } from './orderCard'
 import styled from 'styled-components'
 import { Container as OrderContainer, Detail as OrderDetail } from './orderDetail'
-import { returnOrderDetail, returnTotalPrice } from 'utils/cardFunc'
-import { ReactComponent as UpArrowIcon } from 'assets/image/up-arrow.svg'
 import { ReactComponent as DownArrowIcon } from 'assets/image/down-arrow.svg'
+import { Menu } from 'utils/type'
+import { Variants, motion } from 'framer-motion'
+import { returnOrderDetail, returnTotalPrice } from 'utils/order'
+
+const iconVariants: Variants = {
+  notShow: { transform: 'scaleY(1)', transition: { duration: 0.4 } },
+  show: { transform: 'scaleY(-1)', transition: { duration: 0.4 } },
+}
+
+const orderBoxVariants: Variants = {
+  notShow: { opacity: 0, transition: { duration: 0.3, ease: 'easeInOut' } },
+  show: { opacity: 1, transition: { duration: 0.3, ease: 'easeInOut' } },
+}
 
 interface PreviousOrderProps {
-  orders: orderType[]
+  orders: Menu[][]
   showDetail: boolean
   setShowDetail: React.Dispatch<SetStateAction<boolean>>
   showLabel: boolean
@@ -15,24 +25,39 @@ interface PreviousOrderProps {
 
 export default function PreviousOrder({ orders, showDetail, setShowDetail, showLabel }: PreviousOrderProps) {
   const toggleShowDetail = () => setShowDetail(!showDetail)
+
   return (
     <Container>
       {showLabel && (
         <ShowButton onClick={toggleShowDetail}>
           이전 주문 보기
-          {showDetail ? <UpArrowIcon width={24} height={24} /> : <DownArrowIcon width={24} height={24} />}
+          <motion.svg
+            width={24}
+            height={24}
+            variants={iconVariants}
+            initial="notShow"
+            animate={showDetail ? 'show' : 'notShow'}
+          >
+            <DownArrowIcon width={24} height={24} />
+          </motion.svg>
         </ShowButton>
       )}
       {showDetail && (
-        <OrderBox>
+        <OrderBox
+          variants={orderBoxVariants}
+          initial="notShow"
+          exit="notShow"
+          animate={showDetail ? 'show' : 'notShow'}
+          transition={{ duration: 0.15, ease: 'easeInOut' }}
+        >
           {orders.map(order => (
             <PrevOrderContainer>
               <OrderContainer>
-                {orders.map(order => (
-                  <OrderDetail>{returnOrderDetail(order)}</OrderDetail>
+                {order.map(eachOrder => (
+                  <OrderDetail>{returnOrderDetail(eachOrder)}</OrderDetail>
                 ))}
               </OrderContainer>
-              <TotalPrice>{returnTotalPrice(orders).toLocaleString()}원</TotalPrice>
+              <TotalPrice>{returnTotalPrice(order).toLocaleString()}원</TotalPrice>
             </PrevOrderContainer>
           ))}
         </OrderBox>
@@ -54,7 +79,7 @@ const ShowButton = styled.div`
   gap: 8px;
   cursor: pointer;
 `
-const OrderBox = styled.div`
+const OrderBox = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 24px;

@@ -1,6 +1,13 @@
 const path = require('path')
+const dotenv = require('dotenv')
+dotenv.config()
 
 module.exports = {
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
+  ],
   resolve: {
     alias: {
       '@assets': path.resolve(__dirname, 'src/assets/'),
@@ -20,7 +27,19 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name].[hash].[ext]',
-              outputPath: 'images',
+              outputPath: 'assets/images/',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.mp3$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/sounds/',
             },
           },
         ],

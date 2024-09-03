@@ -1,46 +1,65 @@
+import { PaymentHistory } from 'apis/paymentHistory'
 import OrderCard from 'components/orderCard'
+import dayjs from 'dayjs'
+import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
 import { useAtom } from 'jotai'
-import { Container, CardContainer, TabTitle } from 'styles/shared'
+import { Container, CardContainer, TabTitle, Loading } from 'styles/shared'
 import { processCountAtom } from 'utils/atom'
-
-export const orderlist = [
-  {
-    name: '크림 새우 스파게티',
-    price: 14000,
-    count: 1,
-  },
-  {
-    name: '토마토 스파게티',
-    price: 12000,
-    options: [
-      {
-        name: '치즈 추가',
-        price: 1500,
-      },
-      {
-        name: '면 추가',
-        price: 4000,
-        count: 2,
-      },
-    ],
-  },
-  {
-    name: '페퍼로니 피자',
-    price: 24000,
-    count: 1,
-  },
-]
+import { parseOrder, returnTotalPrice } from 'utils/order'
+import { OrbitProgress } from 'react-loading-indicators'
 
 export default function ProcessMain() {
   const [processCount] = useAtom(processCountAtom)
 
+  const { data: orderList, isLoading } = useGetPaymentHistory('PROCESS')
+
+  const returnPrevOrders = (orders: PaymentHistory) => {
+    if (orders.orderHistoryResponseDtoList.length <= 1) return undefined
+    return orders.orderHistoryResponseDtoList.slice(1).map(order => parseOrder(order.orderDetail))
+  }
+
+  const returnLatestTime = (orders: PaymentHistory) => {
+    const times = orders.orderHistoryResponseDtoList
+      .map(order => order.updatedAt)
+      .sort((a, b) => dayjs(b).diff(dayjs(a)))
+
+    return times[0] ?? ''
+  }
+
   return (
     <Container>
       <TabTitle>진행 중 {processCount}</TabTitle>
-      <CardContainer>
-        <OrderCard status="multi" tableNumber={2} orders={orderlist} prevOrders={orderlist} />
-        <OrderCard status="single" tableNumber={2} orders={orderlist} />
-      </CardContainer>
+      {isLoading ? (
+        <Loading>
+          <OrbitProgress color="#6f6f6f" size="small" />
+        </Loading>
+      ) : (
+        <CardContainer>
+          {orderList
+            ?.map(orders => ({
+              ...orders,
+              orderHistoryResponseDtoList: orders.orderHistoryResponseDtoList
+                .filter(order => order.status === 'APPROVED')
+                .sort((a, b) => dayjs(b.updatedAt).diff(a.updatedAt)),
+            }))
+            .filter(orders => orders.orderHistoryResponseDtoList.length > 0)
+            .sort((a, b) =>
+              dayjs(b.orderHistoryResponseDtoList[0].updatedAt).diff(a.orderHistoryResponseDtoList[0].updatedAt),
+            )
+            .map(orders => (
+              <OrderCard
+                paymentHistoryId={orders.paymentHistoryId}
+                orderHistoryId={orders.orderHistoryResponseDtoList[0].orderHistoryId}
+                status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
+                tableNumber={orders.tableNumber}
+                time={returnLatestTime(orders)}
+                totalPrice={returnTotalPrice(parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail))}
+                orders={parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail)}
+                prevOrders={returnPrevOrders(orders)}
+              />
+            ))}
+        </CardContainer>
+      )}
     </Container>
   )
 }
