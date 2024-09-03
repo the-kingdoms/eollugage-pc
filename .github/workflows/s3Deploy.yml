@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: 'v20.10.0'
 
+      - name: Put Env
+        run: echo ${{ secrets.AWS_ACCESS_KEY_ID }} > .env
+
       - name: Install dependencies
         run: yarn install
 
