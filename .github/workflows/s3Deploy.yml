@@ -18,7 +18,7 @@ jobs:
           node-version: 21
 
       - name: Put Env
-        run: echo ${{ secrets.AWS_ACCESS_KEY_ID }} > .env
+        run: echo ${{ secrets.ENV }} > .env
 
       - name: Install dependencies
         run: yarn install
