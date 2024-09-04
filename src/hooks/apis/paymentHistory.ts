@@ -18,9 +18,9 @@ function useGetWaitingOrder() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['getWaitingOrder'],
-    queryFn: () => getPaymentHistory(storeId),
     refetchInterval: 5000,
     refetchIntervalInBackground: true,
+    queryFn: () => getPaymentHistory(storeId, 'ALL'),
   })
 
   useEffect(() => {
@@ -38,12 +38,12 @@ function useGetWaitingOrder() {
   return { data, isLoading }
 }
 
-function useGetPaymentHistory(status: string, filter?: string) {
+function useGetPaymentHistory(status: string, filter: string = 'ALL') {
   const [storeId] = useAtom(storeIdAtom)
 
   const { data, isLoading } = useQuery({
     queryKey: ['getPaymentHistory', status, filter],
-    queryFn: () => getPaymentHistory(storeId, status, filter),
+    queryFn: () => getPaymentHistory(storeId, filter, status),
   })
 
   return { data, isLoading }
@@ -69,7 +69,8 @@ function usePatchPaymentHistory(tableNumber?: number) {
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, status),
     onSuccess: () => {
       setModalShow(false)
-      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'] })
     },
     onError: (error, variables) => {
       const axiosError = error as AxiosError
