@@ -8,6 +8,12 @@ import { useNavigate } from 'react-router-dom'
 import { ROUTE } from 'constants/path'
 import { getProcessCount, getWaitingCount } from 'utils/getAlarmCount'
 
+interface PatchParameterType {
+  orderHistoryId: string
+  paymentHistoryId: string
+  status: string
+}
+
 function useGetWaitingOrder() {
   const [storeId] = useAtom(storeIdAtom)
   const [, setWaitingCount] = useAtom(waitingCountAtom)
@@ -48,12 +54,6 @@ function usePatchPaymentHistory(tableNumber?: number) {
   const [storeId] = useAtom(storeIdAtom)
   const [, setModalShow] = useAtom(modalShowAtom)
   const [, setModalDetail] = useAtom(modalDetailAtom)
-
-  interface PatchParameterType {
-    orderHistoryId: string
-    paymentHistoryId: string
-    status: string
-  }
 
   const { mutate } = useMutation({
     mutationKey: ['patchPaymentHistory'],

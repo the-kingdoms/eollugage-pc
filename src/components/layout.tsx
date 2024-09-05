@@ -50,7 +50,7 @@ export default function Layout() {
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [waitingCount])
+  }, [waitingCount, playSound])
 
   return (
     <Container>
