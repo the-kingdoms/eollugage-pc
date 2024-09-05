@@ -6,15 +6,12 @@ import { modalDetailAtom, modalShowAtom, processCountAtom, storeIdAtom, waitingC
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE } from 'constants/path'
-import orderSound from 'assets/sound/newOrder.mp3'
-import useSound from 'use-sound'
+import { getProcessCount, getWaitingCount } from 'utils/getAlarmCount'
 
 function useGetWaitingOrder() {
   const [storeId] = useAtom(storeIdAtom)
   const [, setWaitingCount] = useAtom(waitingCountAtom)
   const [, setProcessCount] = useAtom(processCountAtom)
-
-  const [soundPlay] = useSound(orderSound)
 
   const { data, isLoading } = useQuery({
     queryKey: ['getWaitingOrder'],
@@ -25,15 +22,10 @@ function useGetWaitingOrder() {
 
   useEffect(() => {
     if (data) {
-      // prettier-ignore
-      const waitingCount = data?.reduce((acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length, 0) ?? 0
-      if (waitingCount > 0) soundPlay()
-      setWaitingCount(waitingCount)
-
-      setProcessCount(data?.reduce((acc, cur) => acc + (cur.status === 'PROCESS' ? 1 : 0), 0) ?? 0)
+      setWaitingCount(getWaitingCount(data))
+      setProcessCount(getProcessCount(data))
     }
-    // eslint-disable-next-line
-  }, [data])
+  }, [data, setWaitingCount, setProcessCount])
 
   return { data, isLoading }
 }
