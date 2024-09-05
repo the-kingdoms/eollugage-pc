@@ -53,7 +53,7 @@ export default function ProcessMain() {
                 status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
                 tableNumber={orders.tableNumber}
                 time={returnLatestTime(orders)}
-                totalPrice={returnTotalPrice(parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail))}
+                totalPrice={orders.totalPrice}
                 orders={parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail)}
                 prevOrders={returnPrevOrders(orders)}
               />

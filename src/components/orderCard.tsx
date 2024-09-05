@@ -73,6 +73,14 @@ export default function OrderCard({
     setModalShow(true)
   }
 
+  const getOrderCount = () => {
+    const currentOrderCount = orders.reduce((acc, cur) => acc + cur.count, 0)
+    // prettier-ignore
+    const prevOrdersCount = prevOrders?.reduce((acc, cur) => acc + cur.reduce((acc2, cur2) => acc2 + cur2.count, 0), 0) ?? 0
+
+    return currentOrderCount + prevOrdersCount
+  }
+
   return (
     <Container>
       <Top>
@@ -88,7 +96,7 @@ export default function OrderCard({
         </TimeText>
       </Top>
       <OrderSummary>
-        메뉴 {orders.length}개 총 {totalPrice.toLocaleString()}원
+        메뉴 {getOrderCount()}개 총 {totalPrice.toLocaleString()}원
       </OrderSummary>
       <OrderDetail orders={orders} />
       {!(pathname === ROUTE.HISTORY_MAIN && status === 'single') && <Divider />}
