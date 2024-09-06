@@ -5,7 +5,7 @@ import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
 import { useAtom } from 'jotai'
 import { Container, CardContainer, TabTitle, Loading } from 'styles/shared'
 import { processCountAtom } from 'utils/atom'
-import { parseOrder, returnTotalPrice } from 'utils/order'
+import { parseOrder } from 'utils/order'
 import { OrbitProgress } from 'react-loading-indicators'
 
 export default function ProcessMain() {
@@ -53,7 +53,7 @@ export default function ProcessMain() {
                 status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
                 tableNumber={orders.tableNumber}
                 time={returnLatestTime(orders)}
-                totalPrice={returnTotalPrice(parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail))}
+                totalPrice={orders.totalPrice}
                 orders={parseOrder(orders.orderHistoryResponseDtoList[0].orderDetail)}
                 prevOrders={returnPrevOrders(orders)}
               />

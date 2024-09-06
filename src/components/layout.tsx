@@ -5,6 +5,9 @@ import { useAtom } from 'jotai'
 import { currentTabAtom, modalDetailAtom, modalShowAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
 import { ROUTE } from 'constants/path'
 import Modal from './modal'
+import { useEffect } from 'react'
+import useSound from 'use-sound'
+import orderSound from 'assets/sound/newOrder.mp3'
 
 export default function Layout() {
   const navigate = useNavigate()
@@ -38,6 +41,16 @@ export default function Layout() {
     setCurrentTab(pathname)
     navigate(pathname)
   }
+
+  const [playSound] = useSound(orderSound)
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+    if (waitingCount > 0) interval = setInterval(playSound, 5000)
+
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [waitingCount, playSound])
 
   return (
     <Container>
