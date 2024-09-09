@@ -6,44 +6,42 @@ import { modalDetailAtom, modalShowAtom, processCountAtom, storeIdAtom, waitingC
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE } from 'constants/path'
-import orderSound from 'assets/sound/newOrder.mp3'
-import useSound from 'use-sound'
+import { getProcessCount, getWaitingCount } from 'utils/getAlarmCount'
+
+interface PatchParameterType {
+  orderHistoryId: string
+  paymentHistoryId: string
+  status: string
+}
 
 function useGetWaitingOrder() {
   const [storeId] = useAtom(storeIdAtom)
   const [, setWaitingCount] = useAtom(waitingCountAtom)
   const [, setProcessCount] = useAtom(processCountAtom)
 
-  const [soundPlay] = useSound(orderSound)
-
   const { data, isLoading } = useQuery({
     queryKey: ['getWaitingOrder'],
-    queryFn: () => getPaymentHistory(storeId),
     refetchInterval: 5000,
     refetchIntervalInBackground: true,
+    queryFn: () => getPaymentHistory(storeId, 'ALL'),
   })
 
   useEffect(() => {
     if (data) {
-      // prettier-ignore
-      const waitingCount = data?.reduce((acc, cur) => acc + cur.orderHistoryResponseDtoList.filter(order => order.status === 'PENDING').length, 0) ?? 0
-      if (waitingCount > 0) soundPlay()
-      setWaitingCount(waitingCount)
-
-      setProcessCount(data?.reduce((acc, cur) => acc + (cur.status === 'PROCESS' ? 1 : 0), 0) ?? 0)
+      setWaitingCount(getWaitingCount(data))
+      setProcessCount(getProcessCount(data))
     }
-    // eslint-disable-next-line
-  }, [data])
+  }, [data, setWaitingCount, setProcessCount])
 
   return { data, isLoading }
 }
 
-function useGetPaymentHistory(status: string, filter?: string) {
+function useGetPaymentHistory(status: string, filter: string = 'ALL') {
   const [storeId] = useAtom(storeIdAtom)
 
   const { data, isLoading } = useQuery({
     queryKey: ['getPaymentHistory', status, filter],
-    queryFn: () => getPaymentHistory(storeId, status, filter),
+    queryFn: () => getPaymentHistory(storeId, filter, status),
   })
 
   return { data, isLoading }
@@ -57,19 +55,14 @@ function usePatchPaymentHistory(tableNumber?: number) {
   const [, setModalShow] = useAtom(modalShowAtom)
   const [, setModalDetail] = useAtom(modalDetailAtom)
 
-  interface PatchParameterType {
-    orderHistoryId: string
-    paymentHistoryId: string
-    status: string
-  }
-
   const { mutate } = useMutation({
     mutationKey: ['patchPaymentHistory'],
     mutationFn: ({ orderHistoryId, paymentHistoryId, status }: PatchParameterType) =>
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, status),
     onSuccess: () => {
       setModalShow(false)
-      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'] })
     },
     onError: (error, variables) => {
       const axiosError = error as AxiosError
