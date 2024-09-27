@@ -22,7 +22,7 @@ function createWindow() {
     },
   })
 
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`)
+  mainWindow.loadURL(isDev ? 'http://localhost:3000' : 'https://gage-pc.eolluga.com')
 
   if (isDev) mainWindow.webContents.openDevTools({ mode: 'detach' })
 
