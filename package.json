@@ -1,73 +1,41 @@
 {
   "name": "eollugage-pc",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "main": "./public/electron.js",
-  "homepage": ".",
-  "type": "module",
-  "dependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@tanstack/react-query": "^5.51.11",
-    "@tanstack/react-query-devtools": "^5.51.11",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.103",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "dayjs": "^1.11.12",
-    "dotenv": "^16.4.5",
-    "electron-is-dev": "^3.0.1",
-    "env-cmd": "^10.1.0",
-    "framer-motion": "^11.3.30",
-    "jotai": "^2.9.0",
-    "jotai-devtools": "^0.10.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-loading-indicators": "^1.0.0",
-    "react-router-dom": "^6.25.1",
-    "react-scripts": "5.0.1",
-    "styled-components": "^6.1.12",
-    "typescript": "^4.9.5",
-    "use-sound": "^4.0.3",
-    "web-vitals": "^2.1.4"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "env-build": "env-cmd -f .env react-scripts build",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "concurrently \"cross-env NODE_ENV=development BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron-build": "yarn build && electron-builder",
-    "electron-build:win": "yarn build && electron-builder --win --x64"
+    "init-project": "yarn install && cd src && yarn install && cd .. && cd electron && yarn install && cd ..",
+    "start": "concurrently \"cd src && yarn start\" \"cd electron && yarn electron\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the-kingdoms/eollugage-pc.git"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^5.51.12",
-    "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3",
-    "electron": "^31.2.1",
-    "electron-builder": "^24.13.3",
-    "wait-on": "^7.2.0"
+    "concurrently": "^8.2.2"
+  },
+  "build": {
+    "appId": "com.eolluga.eollugage-pc",
+    "productName": "얼루가게 PC",
+    "files": [
+      "build/**/*",
+      "icon/**/*"
+    ],
+    "mac": {
+      "target": [
+        "default"
+      ],
+      "icon": "./icon/eollugage/logo.png"
+    },
+    "dmg": {
+      "title": "얼루가게 PC",
+      "icon": "./icon/eollugage/logo.png"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./icon/eollugage/logo.png"
+    }
   },
   "packageManager": "yarn@1.22.19"
 }

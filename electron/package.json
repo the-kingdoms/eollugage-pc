@@ -1,0 +1,74 @@
+{
+  "name": "eollugage-pc",
+  "version": "1.0.0",
+  "private": true,
+  "main": "build/main.js",
+  "homepage": "./",
+  "type": "module",
+  "dependencies": {
+    "electron-is-dev": "^3.0.1",
+    "electron-updater": "^6.3.9",
+    "env-cmd": "^10.1.0",
+    "nodemon": "^3.1.7",
+    "typescript": "^4.9.5"
+  },
+  "scripts": {
+    "electron": "nodemon --watch . --ext 'ts' --exec \"tsc && electron .\"",
+    "electron-build:mac": "electron-builder --mac",
+    "electron-build:win": "electron-builder --win --x64"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/the-kingdoms/eollugage-pc.git"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^31.2.1",
+    "electron-builder": "^24.13.3",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.eolluga.eollugage-pc",
+    "productName": "얼루가게 PC",
+    "files": [
+      "build/**/*",
+      "icon/**/*"
+    ],
+    "mac": {
+      "target": [
+        "default"
+      ],
+      "icon": "./icon/eollugage/logo.png"
+    },
+    "dmg": {
+      "title": "얼루가게 PC",
+      "icon": "./icon/eollugage/logo.png"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "./icon/eollugage/logo.png"
+    }
+  },
+  "packageManager": "yarn@1.22.19"
+}
