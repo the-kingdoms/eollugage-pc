@@ -2,8 +2,6 @@
   "name": "eollugage-pc-fe",
   "version": "1.0.0",
   "private": true,
-  "main": "build/main.js",
-  "homepage": "./",
   "type": "module",
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Route, Routes } from 'react-router'
 import { ROUTE } from './constants/path'
 import ProcessMain from './pages/process'
