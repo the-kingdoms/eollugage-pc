@@ -5,7 +5,8 @@ import Layout from './components/layout'
 import Login from './pages/login'
 import HistoryMain from './pages/history'
 import WaitMain from './pages/waiting'
-import Redirect from 'pages/oauth'
+import Redirect from './pages/oauth'
+import Update from './pages/update'
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path={ROUTE.PROCESS_MAIN} element={<ProcessMain />} />
         <Route path={ROUTE.HISTORY_MAIN} element={<HistoryMain />} />
       </Route>
+      <Route path={ROUTE.UPDATE} element={<Update />} />
     </Routes>
   )
 }

@@ -74,7 +74,7 @@ export default function Layout() {
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 900px;
   display: flex;
 `
 const NavWrapper = styled.div`
