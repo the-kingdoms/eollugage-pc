@@ -35,7 +35,7 @@ export default function Update() {
           zIndex: 10,
         }}
       >
-        <div style={{ color: 'white', fontSize: 22 }}>
+        <div style={{ color: 'white', fontSize: 18, overflow: 'hidden', wordBreak: 'break-all', width: 300 }}>
           <p dangerouslySetInnerHTML={{ __html: log }}></p>
         </div>
         <div className="progress">
