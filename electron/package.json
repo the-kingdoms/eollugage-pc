@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "main": "build/main.js",
   "homepage": "./",
+  "author": {
+    "name": "eolluga",
+    "email": "develop@eolluga.com"
+  },
+  "description": "얼루가게 PC",
   "dependencies": {
     "electron-is-dev": "^3.0.1",
     "electron-updater": "^6.3.9",
@@ -12,26 +17,8 @@
   },
   "scripts": {
     "electron": "env-cmd -f .env nodemon --watch . --ext 'ts' --exec \"tsc && electron .\"",
-    "electron-build:mac": "electron-builder --mac",
-    "electron-build:win": "electron-builder --win --x64"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "electron-build:mac": "tsc && electron-builder --mac",
+    "electron-build:win": "tsc && electron-builder --win --x64"
   },
   "repository": {
     "type": "git",
@@ -41,7 +28,7 @@
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "electron": "^31.2.1",
-    "electron-builder": "^24.13.3",
+    "electron-builder": "^23.6.0",
     "wait-on": "^7.2.0"
   },
   "build": {

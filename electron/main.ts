@@ -10,19 +10,14 @@ console.log('isDev:', isDev)
 
 let startUrl: string = isDev ? 'http://localhost:3000' : 'https://gage-pc.eolluga.com'
 
-Object.defineProperty(app, 'isPackaged', {
-  get() {
-    return true
-  },
-})
+console.log('startUrl:', startUrl)
 
 function createWindow() {
   console.log(new Date().toLocaleString())
-  console.log('Oasis is starting...')
+  console.log('eollugage-pc is starting...')
 
   // Update window
   let win_update = windowUpdate(startUrl)
-  win_update.webContents.toggleDevTools()
   updater(win_update)
     .then(() => {
       let win_main = windowMain(startUrl)
