@@ -28,4 +28,5 @@ yarn-error.log*
 /electron/build
 /electron/node_modules
 
+/frontend/build
 /frontend/node_modules
