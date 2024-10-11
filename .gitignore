@@ -26,3 +26,6 @@ yarn-error.log*
 
 /electron/dist
 /electron/build
+/electron/node_modules
+
+/frontend/node_modules
