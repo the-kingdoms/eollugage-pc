@@ -1,4 +1,4 @@
-import { useKakaoLogin } from 'hooks/apis/login'
+import { useKakaoLogin } from 'hooks/apis/useLogin'
 import { useEffect, useRef } from 'react'
 
 export default function Redirect() {

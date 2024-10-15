@@ -12,12 +12,4 @@ waitingCountAtom.debugLabel = 'waitingCountAtom'
 export const storeIdAtom = atomWithStorage('Store ID', '')
 storeIdAtom.debugLabel = 'storeIdAtom'
 
-export const modalDetailAtom = atom<ModalProps>({
-  title: '',
-  description: '',
-  grayButtonText: '',
-  blackButtonText: '',
-  onClickGrayButton: () => console.log(),
-  onClickBlackButton: () => console.log(),
-})
-export const modalShowAtom = atom<boolean>(false)
+export const modalDetailAtom = atom<ModalProps | null>(null)

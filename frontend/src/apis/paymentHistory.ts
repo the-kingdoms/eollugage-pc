@@ -22,6 +22,7 @@ export interface OrderHistory {
 
 type PaymentHistoryStatus = 'WAITING' | 'PROCESS' | 'HISTORY'
 type OrderHistoryStatus = 'APPROVED' | 'PENDING' | 'DISAPPROVED' | 'HISTORY'
+type PatchPaymentHistoryStatus = 'APPROVED' | 'DONE' | 'DENIED'
 
 async function getPaymentHistory(storeId: string, filter: string, status?: string): Promise<PaymentHistory[]> {
   const statusQuery = status ? `&status=${status}` : ''
@@ -33,7 +34,7 @@ async function patchPaymentHistory(
   storeId: string,
   paymentHistoryId: string,
   orderHistoryId: string,
-  status: string,
+  status: PatchPaymentHistoryStatus,
 ): Promise<PaymentHistory[]> {
   const body = { status }
   const { data } = await api.patch(

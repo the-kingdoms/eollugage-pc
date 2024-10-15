@@ -1,21 +1,20 @@
+import orderSound from 'assets/sound/newOrder.mp3'
+import { ROUTE } from 'constants/path'
+import { useModal } from 'hooks/useModal'
+import { useAtom } from 'jotai'
+import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import styled from 'styled-components'
-import NavBar from './navBar'
-import { useAtom } from 'jotai'
-import { currentTabAtom, modalDetailAtom, modalShowAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
-import { ROUTE } from 'constants/path'
-import Modal from './modal'
-import { useEffect } from 'react'
 import useSound from 'use-sound'
-import orderSound from 'assets/sound/newOrder.mp3'
+import { currentTabAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
+import NavBar from './navBar'
 
 export default function Layout() {
+  const { modal } = useModal()
   const navigate = useNavigate()
   const [, setCurrentTab] = useAtom(currentTabAtom)
   const [waitingCount] = useAtom(waitingCountAtom)
   const [processCount] = useAtom(processCountAtom)
-  const [modalDetail] = useAtom(modalDetailAtom)
-  const [modalShow] = useAtom(modalShowAtom)
 
   const navBarItem = [
     {
@@ -54,16 +53,7 @@ export default function Layout() {
 
   return (
     <Container>
-      {modalShow && (
-        <Modal
-          title={modalDetail?.title}
-          description={modalDetail?.description}
-          grayButtonText={modalDetail?.grayButtonText}
-          blackButtonText={modalDetail?.blackButtonText}
-          onClickGrayButton={modalDetail?.onClickGrayButton}
-          onClickBlackButton={modalDetail?.onClickBlackButton}
-        />
-      )}
+      {modal}
       <NavWrapper>
         <NavBar items={navBarItem} />
       </NavWrapper>

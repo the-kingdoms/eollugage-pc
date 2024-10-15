@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Container, CardContainer, TabTitle, Loading } from 'styles/shared'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
-import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
+import { useGetPaymentHistory } from 'hooks/apis/usePaymentHistory'
 import { OrbitProgress } from 'react-loading-indicators'
 import { parseOrder } from 'utils/order'
 

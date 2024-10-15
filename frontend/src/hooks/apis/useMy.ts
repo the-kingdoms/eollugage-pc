@@ -1,12 +1,12 @@
-import { ROUTE } from 'constants/path'
-import { QueryClient, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getMy } from 'apis/my'
+import { ROUTE } from 'constants/path'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { storeIdAtom } from 'utils/atom'
 
-function useGetMy(queryClient?: QueryClient) {
+function useGetMy() {
   const navigate = useNavigate()
   const [, setStoreId] = useAtom(storeIdAtom)
   const query = useQuery({
@@ -22,7 +22,7 @@ function useGetMy(queryClient?: QueryClient) {
     // eslint-disable-next-line
   }, [query.isSuccess])
 
-  return query.refetch
+  return query
 }
 
 export { useGetMy }

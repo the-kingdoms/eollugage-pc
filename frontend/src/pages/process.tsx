@@ -1,7 +1,7 @@
 import { PaymentHistory } from 'apis/paymentHistory'
 import OrderCard from 'components/orderCard'
 import dayjs from 'dayjs'
-import { useGetPaymentHistory } from 'hooks/apis/paymentHistory'
+import { useGetPaymentHistory } from 'hooks/apis/usePaymentHistory'
 import { useAtom } from 'jotai'
 import { Container, CardContainer, TabTitle, Loading } from 'styles/shared'
 import { processCountAtom } from 'utils/atom'

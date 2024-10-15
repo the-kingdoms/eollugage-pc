@@ -1,17 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
+import { AxiosError } from 'axios'
+import { ROUTE } from 'constants/path'
+import { useModal } from 'hooks/useModal'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { modalDetailAtom, modalShowAtom, processCountAtom, storeIdAtom, waitingCountAtom } from 'utils/atom'
-import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { ROUTE } from 'constants/path'
+import { processCountAtom, storeIdAtom, waitingCountAtom } from 'utils/atom'
 import { getProcessCount, getWaitingCount } from 'utils/getAlarmCount'
 
 interface PatchParameterType {
   orderHistoryId: string
   paymentHistoryId: string
-  status: string
 }
 
 function useGetWaitingOrder() {
@@ -47,20 +47,57 @@ function useGetPaymentHistory(status: string, filter: string = 'ALL') {
   return { data, isLoading }
 }
 
-function usePatchPaymentHistory(tableNumber?: number) {
+function usePatchPaymentHistoryApproved() {
+  const { closeModal } = useModal()
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
 
   const [storeId] = useAtom(storeIdAtom)
-  const [, setModalShow] = useAtom(modalShowAtom)
-  const [, setModalDetail] = useAtom(modalDetailAtom)
 
   const { mutate } = useMutation({
-    mutationKey: ['patchPaymentHistory'],
-    mutationFn: ({ orderHistoryId, paymentHistoryId, status }: PatchParameterType) =>
-      patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, status),
+    mutationKey: ['patchPaymentHistory', 'APPROVED'],
+    mutationFn: ({ orderHistoryId, paymentHistoryId }: PatchParameterType) =>
+      patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, 'APPROVED'),
     onSuccess: () => {
-      setModalShow(false)
+      closeModal()
+      queryClient.invalidateQueries({ queryKey: ['getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'] })
+    },
+  })
+  return { mutate }
+}
+
+function usePatchPaymentHistoryDenied() {
+  const { closeModal } = useModal()
+  const queryClient = useQueryClient()
+
+  const [storeId] = useAtom(storeIdAtom)
+
+  const { mutate } = useMutation({
+    mutationKey: ['patchPaymentHistory', 'DENIED'],
+    mutationFn: ({ orderHistoryId, paymentHistoryId }: PatchParameterType) =>
+      patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, 'DENIED'),
+    onSuccess: () => {
+      closeModal()
+      queryClient.invalidateQueries({ queryKey: ['getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'] })
+    },
+  })
+  return { mutate }
+}
+
+function usePatchPaymentHistoryDone(tableNumber?: number) {
+  const navigate = useNavigate()
+  const { openModal, closeModal } = useModal()
+  const queryClient = useQueryClient()
+
+  const [storeId] = useAtom(storeIdAtom)
+
+  const { mutate } = useMutation({
+    mutationKey: ['patchPaymentHistory', 'DONE'],
+    mutationFn: ({ orderHistoryId, paymentHistoryId }: PatchParameterType) =>
+      patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, 'DONE'),
+    onSuccess: () => {
+      closeModal()
       queryClient.invalidateQueries({ queryKey: ['getWaitingOrder'] })
       queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'] })
     },
@@ -68,21 +105,26 @@ function usePatchPaymentHistory(tableNumber?: number) {
       const axiosError = error as AxiosError
       const { paymentHistoryId } = variables as PatchParameterType
       if (axiosError.response?.status === 400)
-        setModalDetail({
+        openModal({
           title: `${tableNumber}번 테이블 주문을 먼저 수락해주세요.`,
           description: `결제하기 전에 ${tableNumber}번 테이블에서 아직 승인 대기 중인 주문이 있습니다.`,
           grayButtonText: '닫기',
           blackButtonText: '주문 내역 확인',
-          onClickGrayButton: () => setModalShow(false),
+          onClickGrayButton: closeModal,
           onClickBlackButton: () => {
-            setModalShow(false)
+            closeModal()
             navigate(ROUTE.WAITING_MAIN, { state: paymentHistoryId })
           },
         })
-      setModalShow(true)
     },
   })
   return { mutate }
 }
 
-export { useGetWaitingOrder, useGetPaymentHistory, usePatchPaymentHistory }
+export {
+  useGetPaymentHistory,
+  useGetWaitingOrder,
+  usePatchPaymentHistoryApproved,
+  usePatchPaymentHistoryDenied,
+  usePatchPaymentHistoryDone,
+}
