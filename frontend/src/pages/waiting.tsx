@@ -3,13 +3,13 @@ import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CardContainer, Container, TabTitle } from 'styles/shared'
-import { waitingOrderAtom } from 'utils/atom'
+import { onGoingOrderAtom } from 'utils/atom'
 import { getWaitingCount } from 'utils/getAlarmCount'
 import { parseOrder, sortOrder } from 'utils/order'
 
 export default function WaitMain() {
   const location = useLocation()
-  const [waitingOrder] = useAtom(waitingOrderAtom)
+  const [onGoingOrder] = useAtom(onGoingOrderAtom)
 
   useEffect(() => {
     if (location.state !== null) {
@@ -19,9 +19,9 @@ export default function WaitMain() {
 
   return (
     <Container>
-      <TabTitle>승인 대기 {getWaitingCount(waitingOrder)}</TabTitle>
+      <TabTitle>승인 대기 {getWaitingCount(onGoingOrder)}</TabTitle>
       <CardContainer>
-        {sortOrder(waitingOrder, 'PENDING').map((order, i) => (
+        {sortOrder(onGoingOrder, 'PENDING').map((order, i) => (
           <div id={order.paymentHistoryId} key={order.orderHistoryId}>
             <OrderCard
               orderHistoryId={order.orderHistoryId}

@@ -3,12 +3,12 @@ import OrderCard from 'components/orderCard'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { CardContainer, Container, TabTitle } from 'styles/shared'
-import { processOrderAtom } from 'utils/atom'
+import { onGoingOrderAtom } from 'utils/atom'
 import { getProcessCount } from 'utils/getAlarmCount'
 import { parseOrder } from 'utils/order'
 
 export default function ProcessMain() {
-  const [processOrder] = useAtom(processOrderAtom)
+  const [onGoingOrder] = useAtom(onGoingOrderAtom)
 
   const returnPrevOrders = (orders: PaymentHistory) => {
     if (orders.orderHistoryResponseDtoList.length <= 1) return undefined
@@ -25,9 +25,9 @@ export default function ProcessMain() {
 
   return (
     <Container>
-      <TabTitle>진행 중 {getProcessCount(processOrder)}</TabTitle>
+      <TabTitle>진행 중 {getProcessCount(onGoingOrder)}</TabTitle>
       <CardContainer>
-        {processOrder
+        {onGoingOrder
           ?.map(orders => ({
             ...orders,
             orderHistoryResponseDtoList: orders.orderHistoryResponseDtoList

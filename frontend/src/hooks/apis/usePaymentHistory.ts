@@ -8,7 +8,7 @@ import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useSound from 'use-sound'
-import { processOrderAtom, storeIdAtom, waitingOrderAtom } from 'utils/atom'
+import { onGoingOrderAtom, storeIdAtom } from 'utils/atom'
 import { getWaitingCount } from 'utils/getAlarmCount'
 interface PatchParameterType {
   orderHistoryId: string
@@ -18,35 +18,26 @@ interface PatchParameterType {
 function useGetPaymentHistoryOnGoing() {
   const [playSound] = useSound(orderSound)
   const [storeId] = useAtom(storeIdAtom)
-  const [, setWaitingOrder] = useAtom(waitingOrderAtom)
-  const [, setProcessOrder] = useAtom(processOrderAtom)
+  const [, setOnGoingOrder] = useAtom(onGoingOrderAtom)
 
-  const { data: waitingData } = useQuery({
+  const { data } = useQuery({
     queryKey: ['getPaymentHistory', 'WAITING', 'ALL'],
     refetchInterval: 5000,
     refetchIntervalInBackground: true,
     queryFn: async () => {
-      const res = await getPaymentHistory(storeId, 'ALL', 'WAITING')
+      const resWaiting = await getPaymentHistory(storeId, 'ALL', 'WAITING')
+      const resProcess = await getPaymentHistory(storeId, 'ALL', 'PROCESS')
+      const res = [...resWaiting, ...resProcess]
       if (getWaitingCount(res) > 0) playSound()
       return res
     },
   })
 
-  const { data: processData } = useQuery({
-    queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'],
-    refetchInterval: 5000,
-    refetchIntervalInBackground: true,
-    queryFn: () => getPaymentHistory(storeId, 'ALL', 'PROCESS'),
-  })
-
   useEffect(() => {
-    if (waitingData) {
-      setWaitingOrder(waitingData.filter(order => order.status === 'WAITING'))
+    if (data) {
+      setOnGoingOrder(data)
     }
-    if (processData) {
-      setProcessOrder(processData.filter(order => order.status === 'PROCESS'))
-    }
-  }, [waitingData, processData, setWaitingOrder, setProcessOrder])
+  }, [data, setOnGoingOrder])
 }
 
 function useGetPaymentHistory(status: string, filter: string = 'ALL') {

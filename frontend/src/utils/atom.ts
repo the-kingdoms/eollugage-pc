@@ -6,10 +6,8 @@ import { atomWithStorage } from 'jotai/utils'
 export const currentTabAtom = atomWithStorage('Current Tab', '/waiting')
 currentTabAtom.debugLabel = 'currentTabAtom'
 
-export const waitingOrderAtom = atom<PaymentHistory[]>([])
-export const processOrderAtom = atom<PaymentHistory[]>([])
-waitingOrderAtom.debugLabel = 'waitingOrderAtom'
-processOrderAtom.debugLabel = 'processOrderAtom'
+export const onGoingOrderAtom = atom<PaymentHistory[]>([])
+onGoingOrderAtom.debugLabel = 'onGoingOrderAtom'
 
 export const storeIdAtom = atomWithStorage('Store ID', '')
 storeIdAtom.debugLabel = 'storeIdAtom'

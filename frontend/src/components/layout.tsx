@@ -5,7 +5,7 @@ import { useAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import styled from 'styled-components'
-import { currentTabAtom, processOrderAtom, waitingOrderAtom } from 'utils/atom'
+import { currentTabAtom, onGoingOrderAtom } from 'utils/atom'
 import { getProcessCount, getWaitingCount } from 'utils/getAlarmCount'
 import NavBar from './navBar'
 
@@ -14,18 +14,17 @@ export default function Layout() {
   const { modal } = useModal()
   const navigate = useNavigate()
   const [, setCurrentTab] = useAtom(currentTabAtom)
-  const [waitingOrder] = useAtom(waitingOrderAtom)
-  const [processOrder] = useAtom(processOrderAtom)
+  const [onGoingOrder] = useAtom(onGoingOrderAtom)
   const [navBarItem, setNavBarItem] = useState([
     {
       name: '승인 대기',
-      count: getWaitingCount(waitingOrder),
+      count: getWaitingCount(onGoingOrder),
       label: ROUTE.WAITING_MAIN,
       onClick: () => onClickTab(ROUTE.WAITING_MAIN),
     },
     {
       name: '진행 중',
-      count: getProcessCount(processOrder),
+      count: getProcessCount(onGoingOrder),
       label: ROUTE.PROCESS_MAIN,
       onClick: () => onClickTab(ROUTE.PROCESS_MAIN),
     },
@@ -47,13 +46,13 @@ export default function Layout() {
     setNavBarItem([
       {
         name: '승인 대기',
-        count: getWaitingCount(waitingOrder),
+        count: getWaitingCount(onGoingOrder),
         label: ROUTE.WAITING_MAIN,
         onClick: () => onClickTab(ROUTE.WAITING_MAIN),
       },
       {
         name: '진행 중',
-        count: getProcessCount(processOrder),
+        count: getProcessCount(onGoingOrder),
         label: ROUTE.PROCESS_MAIN,
         onClick: () => onClickTab(ROUTE.PROCESS_MAIN),
       },
@@ -63,7 +62,7 @@ export default function Layout() {
         onClick: () => onClickTab(ROUTE.HISTORY_MAIN),
       },
     ])
-  }, [waitingOrder, processOrder, onClickTab])
+  }, [onGoingOrder, onClickTab])
 
   return (
     <Container>
