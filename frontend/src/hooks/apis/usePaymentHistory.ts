@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
-import orderSound from 'assets/sound/newOrder.mp3'
 import { AxiosError } from 'axios'
 import { ROUTE } from 'constants/path'
 import { useModal } from 'hooks/useModal'
@@ -16,7 +15,7 @@ interface PatchParameterType {
 }
 
 function useGetPaymentHistoryOnGoing() {
-  const [playSound] = useSound(orderSound)
+  const [playSound] = useSound('https://s3-eolluga-public.s3.ap-northeast-2.amazonaws.com/eollugage-pc/newOrder.mp3')
   const [storeId] = useAtom(storeIdAtom)
   const [, setOnGoingOrder] = useAtom(onGoingOrderAtom)
 
