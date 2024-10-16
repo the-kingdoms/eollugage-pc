@@ -1,39 +1,52 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getPaymentHistory, patchPaymentHistory } from 'apis/paymentHistory'
+import orderSound from 'assets/sound/newOrder.mp3'
 import { AxiosError } from 'axios'
 import { ROUTE } from 'constants/path'
 import { useModal } from 'hooks/useModal'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { processCountAtom, storeIdAtom, waitingCountAtom } from 'utils/atom'
-import { getProcessCount, getWaitingCount } from 'utils/getAlarmCount'
-
+import useSound from 'use-sound'
+import { processOrderAtom, storeIdAtom, waitingOrderAtom } from 'utils/atom'
+import { getWaitingCount } from 'utils/getAlarmCount'
 interface PatchParameterType {
   orderHistoryId: string
   paymentHistoryId: string
 }
 
-function useGetWaitingOrder() {
+function useGetPaymentHistoryOnGoing() {
+  const [playSound] = useSound(orderSound)
   const [storeId] = useAtom(storeIdAtom)
-  const [, setWaitingCount] = useAtom(waitingCountAtom)
-  const [, setProcessCount] = useAtom(processCountAtom)
+  const [, setWaitingOrder] = useAtom(waitingOrderAtom)
+  const [, setProcessOrder] = useAtom(processOrderAtom)
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['getWaitingOrder'],
+  const { data: waitingData } = useQuery({
+    queryKey: ['getPaymentHistory', 'WAITING', 'ALL'],
     refetchInterval: 5000,
     refetchIntervalInBackground: true,
-    queryFn: () => getPaymentHistory(storeId, 'ALL'),
+    queryFn: async () => {
+      const res = await getPaymentHistory(storeId, 'ALL', 'WAITING')
+      if (getWaitingCount(res) > 0) playSound()
+      return res
+    },
+  })
+
+  const { data: processData } = useQuery({
+    queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'],
+    refetchInterval: 5000,
+    refetchIntervalInBackground: true,
+    queryFn: () => getPaymentHistory(storeId, 'ALL', 'PROCESS'),
   })
 
   useEffect(() => {
-    if (data) {
-      setWaitingCount(getWaitingCount(data))
-      setProcessCount(getProcessCount(data))
+    if (waitingData) {
+      setWaitingOrder(waitingData.filter(order => order.status === 'WAITING'))
     }
-  }, [data, setWaitingCount, setProcessCount])
-
-  return { data, isLoading }
+    if (processData) {
+      setProcessOrder(processData.filter(order => order.status === 'PROCESS'))
+    }
+  }, [waitingData, processData, setWaitingOrder, setProcessOrder])
 }
 
 function useGetPaymentHistory(status: string, filter: string = 'ALL') {
@@ -123,7 +136,7 @@ function usePatchPaymentHistoryDone(tableNumber?: number) {
 
 export {
   useGetPaymentHistory,
-  useGetWaitingOrder,
+  useGetPaymentHistoryOnGoing,
   usePatchPaymentHistoryApproved,
   usePatchPaymentHistoryDenied,
   usePatchPaymentHistoryDone,

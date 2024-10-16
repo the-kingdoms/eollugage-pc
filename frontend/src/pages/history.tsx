@@ -36,6 +36,7 @@ export default function HistoryMain() {
             .sort((a, b) => dayjs(b.paidAt ?? '1999-01-01T00:00:00.000Z').diff(a.paidAt ?? '1999-01-01T00:00:00.000Z'))
             .map(orders => (
               <OrderCard
+                key={orders.paymentHistoryId}
                 status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
                 time={orders.paidAt ?? ''}
                 tableNumber={orders.tableNumber}

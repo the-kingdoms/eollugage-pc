@@ -67,8 +67,3 @@ const DateButton = styled.div<{ selected: boolean }>`
   display: flex;
   align-items: center;
 `
-const DateInput = styled.input`
-  border-radius: 8px;
-  padding: 12px 16px;
-  border: 2px solid #c6c6c6;
-`

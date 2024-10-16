@@ -1,31 +1,31 @@
-import orderSound from 'assets/sound/newOrder.mp3'
 import { ROUTE } from 'constants/path'
+import { useGetPaymentHistoryOnGoing } from 'hooks/apis/usePaymentHistory'
 import { useModal } from 'hooks/useModal'
 import { useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import styled from 'styled-components'
-import useSound from 'use-sound'
-import { currentTabAtom, processCountAtom, waitingCountAtom } from 'utils/atom'
+import { currentTabAtom, processOrderAtom, waitingOrderAtom } from 'utils/atom'
+import { getProcessCount, getWaitingCount } from 'utils/getAlarmCount'
 import NavBar from './navBar'
 
 export default function Layout() {
+  useGetPaymentHistoryOnGoing()
   const { modal } = useModal()
   const navigate = useNavigate()
   const [, setCurrentTab] = useAtom(currentTabAtom)
-  const [waitingCount] = useAtom(waitingCountAtom)
-  const [processCount] = useAtom(processCountAtom)
-
-  const navBarItem = [
+  const [waitingOrder] = useAtom(waitingOrderAtom)
+  const [processOrder] = useAtom(processOrderAtom)
+  const [navBarItem, setNavBarItem] = useState([
     {
       name: '승인 대기',
-      count: waitingCount,
+      count: getWaitingCount(waitingOrder),
       label: ROUTE.WAITING_MAIN,
       onClick: () => onClickTab(ROUTE.WAITING_MAIN),
     },
     {
       name: '진행 중',
-      count: processCount,
+      count: getProcessCount(processOrder),
       label: ROUTE.PROCESS_MAIN,
       onClick: () => onClickTab(ROUTE.PROCESS_MAIN),
     },
@@ -34,22 +34,36 @@ export default function Layout() {
       label: ROUTE.HISTORY_MAIN,
       onClick: () => onClickTab(ROUTE.HISTORY_MAIN),
     },
-  ]
+  ])
 
-  const onClickTab = (pathname: string) => {
-    setCurrentTab(pathname)
-    navigate(pathname)
-  }
-
-  const [playSound] = useSound(orderSound)
+  const onClickTab = useCallback(
+    (pathname: string) => {
+      setCurrentTab(pathname)
+      navigate(pathname)
+    },
+    [navigate, setCurrentTab],
+  )
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
-    if (waitingCount > 0) interval = setInterval(playSound, 5000)
-
-    return () => {
-      if (interval) clearInterval(interval)
-    }
-  }, [waitingCount, playSound])
+    setNavBarItem([
+      {
+        name: '승인 대기',
+        count: getWaitingCount(waitingOrder),
+        label: ROUTE.WAITING_MAIN,
+        onClick: () => onClickTab(ROUTE.WAITING_MAIN),
+      },
+      {
+        name: '진행 중',
+        count: getProcessCount(processOrder),
+        label: ROUTE.PROCESS_MAIN,
+        onClick: () => onClickTab(ROUTE.PROCESS_MAIN),
+      },
+      {
+        name: '히스토리',
+        label: ROUTE.HISTORY_MAIN,
+        onClick: () => onClickTab(ROUTE.HISTORY_MAIN),
+      },
+    ])
+  }, [waitingOrder, processOrder, onClickTab])
 
   return (
     <Container>
