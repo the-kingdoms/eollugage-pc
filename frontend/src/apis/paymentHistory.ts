@@ -5,7 +5,7 @@ export interface PaymentHistory {
   storeId: string
   tableNumber: number
   status: PaymentHistoryStatus
-  paidAt: null
+  paidAt: string | null
   totalPrice: number
   orderHistoryResponseDtoList: OrderHistory[]
 }

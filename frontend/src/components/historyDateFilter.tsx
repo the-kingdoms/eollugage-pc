@@ -6,13 +6,14 @@ const buttonText = [
   { label: '오늘', value: 'TODAY' },
   { label: '1주', value: 'WEEK' },
   { label: '1개월', value: 'MONTH' },
+  { label: '전체', value: 'ALL' },
 ]
 
 interface HistoryDateFilterProps {
   date: string
   setDate: React.Dispatch<SetStateAction<string>>
-  filter: string
-  setFilter: React.Dispatch<SetStateAction<string>>
+  filter: 'TODAY' | 'WEEK' | 'MONTH' | 'ALL'
+  setFilter: React.Dispatch<SetStateAction<'TODAY' | 'WEEK' | 'MONTH' | 'ALL'>>
 }
 
 export default function HistoryDateFilter({ date, setDate, filter, setFilter }: HistoryDateFilterProps) {
@@ -30,6 +31,10 @@ export default function HistoryDateFilter({ date, setDate, filter, setFilter }: 
         setDate(dayjs().subtract(1, 'month').format('YYYY.MM.DD') + ' - ' + dayjs().format('YYYY.MM.DD'))
         setFilter('MONTH')
         break
+      case 'ALL':
+        setDate('전체')
+        setFilter('ALL')
+        break
       default:
         setDate('error')
         setFilter('ALL')
@@ -43,7 +48,6 @@ export default function HistoryDateFilter({ date, setDate, filter, setFilter }: 
           {button.label}
         </DateButton>
       ))}
-      <DateInput type="date" value={dayjs().format('YYYY-MM-DD')} defaultValue={dayjs().format('YYYY-MM-DD')} />
     </Container>
   )
 }

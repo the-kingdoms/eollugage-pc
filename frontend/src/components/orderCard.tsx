@@ -103,7 +103,7 @@ export default function OrderCard({
         <TimeText>
           {pathname === ROUTE.WAITING_MAIN
             ? returnTime(time)
-            : dayjs.utc(time).tz('Asia/Seoul').format('YYYY년 M월 D일 HH시 mm분 ss초')}
+            : time && dayjs.utc(time).tz('Asia/Seoul').format('YYYY년 M월 D일 HH시 mm분 ss초')}
           {pathname === ROUTE.HISTORY_MAIN && ' 결제 완료'}
         </TimeText>
       </Top>

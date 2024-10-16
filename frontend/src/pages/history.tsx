@@ -10,7 +10,7 @@ import { parseOrder } from 'utils/order'
 
 export default function HistoryMain() {
   const [date, setDate] = useState<string>(dayjs().format('YYYY.MM.DD'))
-  const [filter, setFilter] = useState<string>('TODAY')
+  const [filter, setFilter] = useState<'TODAY' | 'WEEK' | 'MONTH' | 'ALL'>('TODAY')
 
   const { data: orderList, isLoading } = useGetPaymentHistory('HISTORY', filter)
 
@@ -33,7 +33,7 @@ export default function HistoryMain() {
                 dayjs(b.updatedAt).diff(a.updatedAt),
               ),
             }))
-            .sort((a, b) => dayjs(a.paidAt).diff(b.paidAt))
+            .sort((a, b) => dayjs(b.paidAt ?? '1999-01-01T00:00:00.000Z').diff(a.paidAt ?? '1999-01-01T00:00:00.000Z'))
             .map(orders => (
               <OrderCard
                 status={orders.orderHistoryResponseDtoList.length > 1 ? 'multi' : 'single'}
