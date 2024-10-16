@@ -72,7 +72,7 @@ function usePatchPaymentHistoryApproved() {
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, 'APPROVED'),
     onSuccess: () => {
       closeModal()
-      queryClient.invalidateQueries({ queryKey: ['getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'WAITING', 'ALL'] })
       queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'] })
     },
   })
@@ -91,7 +91,7 @@ function usePatchPaymentHistoryDenied() {
       patchPaymentHistory(storeId, paymentHistoryId, orderHistoryId, 'DENIED'),
     onSuccess: () => {
       closeModal()
-      queryClient.invalidateQueries({ queryKey: ['getWaitingOrder'] })
+      queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'WAITING', 'ALL'] })
       queryClient.invalidateQueries({ queryKey: ['getPaymentHistory', 'PROCESS', 'ALL'] })
     },
   })
