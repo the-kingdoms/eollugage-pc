@@ -3,12 +3,15 @@ import { autoUpdater } from 'electron-updater'
 import channel from './channel'
 import { sleep } from './utils/function'
 
+const isDev: boolean = process.env.NODE_ENV === 'development'
+
 function updater(win_update: BrowserWindow) {
   return new Promise<void>(async resolve => {
     const webContents = win_update.webContents
 
     await sleep(1000)
     webContents.send(channel.update.log, '업데이트...')
+    isDev && resolve()
     autoUpdater.on('checking-for-update', () => {
       webContents.send(channel.update.log, '업데이트 확인중입니다...')
     })
