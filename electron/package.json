@@ -1,6 +1,6 @@
 {
   "name": "eollugage-pc",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "build/main.js",
   "homepage": "./",
   "author": {
@@ -18,7 +18,8 @@
   "scripts": {
     "electron": "env-cmd -f .env nodemon --watch . --ext 'ts' --exec \"tsc && electron .\"",
     "electron-build:mac": "tsc && electron-builder --mac",
-    "electron-build:win": "tsc && electron-builder --win --x64"
+    "electron-build:win": "tsc && electron-builder --win --x64",
+    "electron-build:win-32": "tsc && electron-builder --win --ia32"
   },
   "repository": {
     "type": "git",
