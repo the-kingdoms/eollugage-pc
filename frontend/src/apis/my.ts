@@ -40,7 +40,7 @@ interface Store {
 }
 
 async function getMy(): Promise<My> {
-  const { data } = await api.get<My>(`/api/my`)
+  const { data } = await api.get<My>(`/api/v1/my`)
   return data
 }
 
