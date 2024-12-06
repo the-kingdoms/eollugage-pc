@@ -16,6 +16,7 @@ import {
 } from 'hooks/apis/usePaymentHistory'
 import { useModal } from 'hooks/useModal'
 import { returnTime } from 'utils/order'
+import { useSendSmsMessage } from 'hooks/apis/useSendSmsMessage'
 
 export type productType = {
   name: string
@@ -61,6 +62,7 @@ export default function OrderCard({
   const { mutate: approvedMutate } = usePatchPaymentHistoryApproved()
   const { mutate: deniedMutate } = usePatchPaymentHistoryDenied()
   const { mutate: doneMutate } = usePatchPaymentHistoryDone(tableNumber)
+  const { mutate: finishCookMutate } = useSendSmsMessage()
 
   const patchPaymentHistory = (status: string) => {
     if (!paymentHistoryId || !orderHistoryId) return
@@ -72,6 +74,21 @@ export default function OrderCard({
       case 'DONE':
         return doneMutate({ paymentHistoryId, orderHistoryId })
     }
+  }
+
+  const finishCook = () => {
+    if (!paymentHistoryId) return
+    finishCookMutate({ paymentHistoryId })
+  }
+
+  const payOrder = () => {
+    openModal({
+      title: '손님이 결제 하셨나요?',
+      grayButtonText: '아직이요',
+      blackButtonText: '넵',
+      onClickGrayButton: closeModal,
+      onClickBlackButton: () => patchPaymentHistory('DONE'),
+    })
   }
 
   const denyOrder = () => {
@@ -128,7 +145,10 @@ export default function OrderCard({
           </>
         )}
         {pathname === ROUTE.PROCESS_MAIN && (
-          <BlackButton onClick={() => patchPaymentHistory('DONE')}>결제 완료</BlackButton>
+          <>
+            <WhiteButton onClick={finishCook}>조리 완료</WhiteButton>
+            <BlackButton onClick={() => payOrder}>결제 완료</BlackButton>
+          </>
         )}
         {pathname === ROUTE.HISTORY_MAIN && status === 'multi' && (
           <BlackButton onClick={toggleShowDetail}>{showDetail ? '최초 주문만 보기' : '이전 주문 보기'}</BlackButton>
