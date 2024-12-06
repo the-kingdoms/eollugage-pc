@@ -1,40 +1,52 @@
+import KakaoLogin from 'components/login/kakaoLogin'
+import PhoneLogin from 'components/login/phoneLogin'
 import styled from 'styled-components'
-import { ReactComponent as Logo } from 'assets/image/eollugage-logo.svg'
-import KakaoButton from 'components/kakaoButton'
 
 export default function Login() {
   return (
-    <Container>
-      <img src={require('assets/image/login.png')} style={{ flex: 1 }} alt="login-image" />
-      <Right>
-        <Title>
-          <Logo />
-          간편하게 일하는 법
-        </Title>
-        <KakaoButton />
-      </Right>
-    </Container>
+    <FullScreen>
+      <Container>
+        <ImageWrapper>
+          <img src={require('assets/image/logo.png')} style={{ width: '100%', height: '100%' }} alt="login-image" />
+        </ImageWrapper>
+        <Body>
+          <PhoneLogin />
+          <KakaoLogin />
+        </Body>
+      </Container>
+    </FullScreen>
   )
 }
 
+const FullScreen = styled.div`
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  align-items: center;
+  height: 100vh;
+`
+
 const Container = styled.div`
   display: flex;
-  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 144px 0;
 `
-const Right = styled.div`
-  flex: 1;
-  background-color: black;
-  width: 100%;
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 96px;
+  height: 96px;
+`
+const Body = styled.div`
+  width: 328px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 88px;
-`
-const Title = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #7c7c7c;
-  gap: 8px;
+  gap: 40px;
 `

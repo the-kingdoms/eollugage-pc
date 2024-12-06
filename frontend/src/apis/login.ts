@@ -4,10 +4,24 @@ interface PostLoginResponse {
   token: string
 }
 
+interface PostSendVerificationCodeResponse {
+  uid: string
+}
+
 export interface PostKakaoLoginBody {
   code: string
   state: string
   redirectUri: string
+}
+
+export interface PostSendVerificationCodeBody {
+  name: string
+  phone: string
+}
+
+export interface PostPhoneLoginBody {
+  uid: string
+  authNumber: string
 }
 
 async function postKakaoLogin(body: PostKakaoLoginBody): Promise<PostLoginResponse> {
@@ -15,4 +29,14 @@ async function postKakaoLogin(body: PostKakaoLoginBody): Promise<PostLoginRespon
   return data
 }
 
-export { postKakaoLogin }
+async function postPhoneLogin(body: PostPhoneLoginBody): Promise<PostLoginResponse> {
+  const { data } = await api.post(`/api/v1/login/phone`, body)
+  return data
+}
+
+async function postSendVerificationCode(body: PostSendVerificationCodeBody): Promise<PostSendVerificationCodeResponse> {
+  const { data } = await api.post(`/api/v1/send-verification-code`, body)
+  return data
+}
+
+export { postKakaoLogin, postPhoneLogin, postSendVerificationCode }

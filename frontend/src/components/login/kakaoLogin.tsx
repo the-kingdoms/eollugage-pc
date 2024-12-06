@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { createRandomString } from 'utils/createRandomId'
 
-export default function KakaoButton() {
+export default function KakaoLogin() {
   const redirectUri = `${window.location.origin}/oauth`
   const onClickLogin = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?redirect_uri=${redirectUri}&client_id=${
@@ -17,14 +17,15 @@ export default function KakaoButton() {
   )
 }
 
-const KakaoLoginButton = styled.div`
+const KakaoLoginButton = styled.button`
   background-color: #fee500;
   width: 328px;
-  border-radius: 1000px;
-  padding: 20px 0;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   cursor: pointer;
+  height: 64px;
+  gap: 8px;
+  border: none;
 `
