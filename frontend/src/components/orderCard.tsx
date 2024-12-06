@@ -147,7 +147,7 @@ export default function OrderCard({
         {pathname === ROUTE.PROCESS_MAIN && (
           <>
             <WhiteButton onClick={finishCook}>조리 완료</WhiteButton>
-            <BlackButton onClick={() => payOrder}>결제 완료</BlackButton>
+            <BlackButton onClick={payOrder}>결제 완료</BlackButton>
           </>
         )}
         {pathname === ROUTE.HISTORY_MAIN && status === 'multi' && (
