@@ -5,7 +5,7 @@ interface PostLoginResponse {
 }
 
 interface PostSendVerificationCodeResponse {
-  uid: string
+  id: string
 }
 
 export interface PostKakaoLoginBody {
@@ -21,7 +21,7 @@ export interface PostSendVerificationCodeBody {
 
 export interface PostPhoneLoginBody {
   uid: string
-  authNumber: string
+  verificationCode: string
 }
 
 async function postKakaoLogin(body: PostKakaoLoginBody): Promise<PostLoginResponse> {

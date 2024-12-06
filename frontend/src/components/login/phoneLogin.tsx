@@ -5,7 +5,7 @@ import styled from 'styled-components'
 export default function PhoneLogin() {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [authNumber, setAuthNumber] = useState('')
+  const [verificationCode, setVerificationCode] = useState('')
   const [uid, setUid] = useState('')
   const [isGetAuthNumber, setIsGetAuthNumber] = useState(false)
 
@@ -20,7 +20,7 @@ export default function PhoneLogin() {
       },
       {
         onSuccess: res => {
-          setUid(res.uid)
+          setUid(res.id)
           setIsGetAuthNumber(true)
         },
       },
@@ -30,7 +30,7 @@ export default function PhoneLogin() {
     loginMutate({
       data: {
         uid,
-        authNumber,
+        verificationCode,
       },
     })
   }
@@ -46,15 +46,18 @@ export default function PhoneLogin() {
         {isGetAuthNumber && (
           <TextField
             placeholder="인증번호를 입력해주세요"
-            value={authNumber}
-            onChange={e => setAuthNumber(e.target.value)}
+            value={verificationCode}
+            onChange={e => setVerificationCode(e.target.value)}
           />
         )}
       </InputContainer>
       {isGetAuthNumber ? (
-        <PhoneLoginButton onClick={onClickLogin} disabled={!authNumber}>
-          인증하기
-        </PhoneLoginButton>
+        <>
+          <UpdateAuthNumberText onClick={onClickGetAuthNumber}>인증번호 다시 받기</UpdateAuthNumberText>
+          <PhoneLoginButton onClick={onClickLogin} disabled={!verificationCode}>
+            인증하기
+          </PhoneLoginButton>
+        </>
       ) : (
         <PhoneLoginButton onClick={onClickGetAuthNumber} disabled={!name || !phone}>
           인증번호 받기
@@ -107,4 +110,12 @@ const PhoneLoginButton = styled.button`
     color: #8d8d8d;
     cursor: not-allowed;
   }
+`
+
+const UpdateAuthNumberText = styled.div`
+  font-size: 12px;
+  color: #131313;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: underline;
 `
