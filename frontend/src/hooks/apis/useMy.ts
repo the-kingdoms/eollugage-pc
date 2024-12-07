@@ -16,8 +16,16 @@ function useGetMy() {
 
   useEffect(() => {
     if (query.isSuccess) {
+      if (query.data.storeList.length === 0) {
+        alert('등록된 가게가 없습니다')
+        navigate(ROUTE.LOGIN)
+        return
+      }
       setStoreId(query.data.storeList[0].storeId)
       navigate(ROUTE.WAITING_MAIN)
+    } else {
+      alert('다시 로그인해주세요')
+      navigate(ROUTE.LOGIN)
     }
     // eslint-disable-next-line
   }, [query.isSuccess])
