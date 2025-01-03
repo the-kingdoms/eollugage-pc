@@ -1,8 +1,16 @@
 import KakaoLogin from 'components/login/kakaoLogin'
 import PhoneLogin from 'components/login/phoneLogin'
+import { useGetMy } from 'hooks/apis/useMy'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 
 export default function Login() {
+  const { refetch } = useGetMy('auto')
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
+
   return (
     <FullScreen>
       <Container>
