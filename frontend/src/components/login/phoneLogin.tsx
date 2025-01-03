@@ -26,6 +26,7 @@ export default function PhoneLogin() {
       },
     )
   }
+
   const onClickLogin = () => {
     loginMutate({
       data: {
@@ -34,6 +35,7 @@ export default function PhoneLogin() {
       },
     })
   }
+
   return (
     <Container>
       <InputContainer>
