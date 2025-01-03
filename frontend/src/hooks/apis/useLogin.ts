@@ -14,7 +14,7 @@ import { useGetMy } from './useMy'
 
 function useKakaoLogin() {
   const navigate = useNavigate()
-  const { refetch } = useGetMy()
+  const { refetch } = useGetMy('click')
 
   const { mutate } = useMutation({
     mutationKey: ['postKakaoLogin'],
@@ -35,7 +35,7 @@ function useKakaoLogin() {
 
 function usePhoneLogin() {
   const navigate = useNavigate()
-  const { refetch } = useGetMy()
+  const { refetch } = useGetMy('click')
 
   const { mutate: sendVerifcationCodeMutate } = useMutation({
     mutationKey: ['postSendVerifcationCode'],
