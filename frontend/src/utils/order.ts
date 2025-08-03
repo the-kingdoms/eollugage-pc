@@ -23,7 +23,7 @@ const sortOrder = (payments: PaymentHistory[] | undefined, status: string) => {
         return {
           ...order,
           tableNumber: orders.tableNumber,
-          totalPrice: orders.totalPrice,
+          totalPrice: returnTotalPrice(parseOrder(order.orderDetail)),
           state: returnStatus(orders, order),
         }
       }),
