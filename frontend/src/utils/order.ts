@@ -68,7 +68,8 @@ const returnTotalPrice = (orders: Menu[]) => {
 }
 
 const returnMenuPrice = (order: Menu) => {
-  return order.price * order.count + order.options?.reduce((acc, cur) => acc + cur.price, 0)
+  const optionsPrice = order.options?.reduce((acc, cur) => acc + cur.price, 0) ?? 0
+  return order.price * order.count + optionsPrice
 }
 
 const returnOptions = (options: productType[] | undefined) => {
